@@ -38,7 +38,7 @@ const Sidebar = () => {
 
             {/* MENU */}
             <div className="mb-8">
-                <p className="text-sm text-gray-400 font-semibold mb-2 pl-4">Menu</p>
+                <p className="text-sm text-gray-400 font-normal mb-2 pl-4">Menu</p>
                 <nav className="flex flex-col space-y-1">
                     <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active />
                     <NavItem icon={<BarChart2 size={20} />} label="Analytics" href="#" />
@@ -49,7 +49,7 @@ const Sidebar = () => {
 
             {/* GENERAL */}
             <div className="flex-grow">
-                <p className="text-sm text-gray-400 font-semibold mb-4 pl-4">General</p>
+                <p className="text-sm text-gray-400 font-normal mb-4 pl-4">General</p>
                 <nav className="flex flex-col space-y-1">
                     <NavItem icon={<Settings size={20} />} label="Settings" href="#" />
                     <NavItem icon={<Palette size={20} />} label="Theme" href="#">
