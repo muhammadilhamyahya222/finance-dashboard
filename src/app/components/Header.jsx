@@ -1,20 +1,17 @@
-// File: app/components/Header.jsx
 "use client";
-// ... (semua import sama seperti sebelumnya) ...
-import { Search, GitCompare, Bell, Settings, ChevronDown } from "lucide-react";
+
+import { Search, GitCompare, Bell, ChevronDown } from "lucide-react";
 
 const Header = () => {
     return (
-        // Header sebagai panel terpisah dengan rounded di semua sisi
         <header className="bg-white p-3 rounded-3xl">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-800 pl-2">Overview</h2>
+                    <h2 className="text-xl font-black text-gray-800 pl-2">Overview</h2>
                 </div>
 
-                {/* Grup Aksi di Kanan */}
                 <div className="flex items-center gap-4">
-                    {/* Search Bar (Tidak berubah) */}
+                    {/* SEARCH BAR */}
                     <div className="relative">
                         <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input
@@ -24,9 +21,8 @@ const Header = () => {
                         />
                     </div>
 
-                    {/* [PERUBAHAN] Pembungkus baru untuk ikon & profil */}
+                    {/* ICON */}
                     <div className="flex items-center bg-gray-100 rounded-full">
-                        {/* Ikon-ikon di dalam pembungkus */}
                         <div className="flex items-center gap-1 p-2.5">
                             <button className="p-1.5 rounded-full hover:bg-gray-200 text-gray-500 hover:text-blue-600">
                                 <GitCompare size={20} />
@@ -37,16 +33,11 @@ const Header = () => {
                             </button>
                         </div>
                     </div>
-                        {/* [PERUBAHAN] Garis pemisah vertikal yang halus */}
-                    <div className="flex items-center bg-gray-100 rounded-full">
 
-                        {/* Profil Pengguna di dalam pembungkus */}
+                    {/* PROFILE */}
+                    <div className="flex items-center bg-gray-100 rounded-full">
                         <div className="flex items-center gap-2 p-1">
-                            <img
-                                src="profile.svg"
-                                alt="User Profile"
-                                className="h-11 w-11 rounded-full" // Ukuran gambar disesuaikan agar pas
-                            />
+                            <img src="profile.svg" alt="User Profile" className="h-11 w-11 rounded-full" />
                             <div>
                                 <p className="font-bold text-sm text-gray-800">Ilham Yahya</p>
                                 <p className="text-xs text-gray-500">code.yahya</p>
