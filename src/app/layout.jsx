@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en" className="">
             <head>
-                <meta charset="UTF-8" />
+                <meta charSet="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <link href="./output.css" rel="stylesheet" />
             </head>

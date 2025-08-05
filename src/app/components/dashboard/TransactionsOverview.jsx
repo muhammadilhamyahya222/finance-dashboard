@@ -36,12 +36,12 @@ export const TransactionsOverview = () => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-2xl shadow-sm h-full">
+        <div className="bg-white p-6 rounded-2xl h-full">
             <div className="flex flex-col sm:flex-row justify-between items-start">
                 <h2 className="text-xl font-bold text-gray-800">Transactions Overview</h2>
                 <div className="flex space-x-1 mt-4 sm:mt-0">
                     <button className="text-sm border border-gray-200 text-gray-500 min-w-16 px-2 py-1 rounded-full hover:bg-gray-100">Monthly</button>
-                    <button className="text-sm bg-gray-800 text-white min-w-16 px-2 py-1 rounded-full">Yearly</button>
+                    <button className="text-sm text-white min-w-16 px-2 py-1 rounded-full bg-gradient-to-t from-gray-900 via-gray-800 to-gray-600">• Yearly</button>
                 </div>
             </div>
 
