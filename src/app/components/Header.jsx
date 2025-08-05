@@ -17,17 +17,17 @@ const Header = () => {
                         <input
                             type="text"
                             placeholder="Search anything..."
-                            className="pl-11 pr-4 py-4 w-72 bg-gray-100 border-none rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="pl-11 pr-4 py-4 w-72 bg-gray-100 border-none rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                         />
                     </div>
 
                     {/* ICON */}
                     <div className="flex items-center bg-gray-100 rounded-full">
                         <div className="flex items-center gap-1 p-2.5">
-                            <button className="p-1.5 rounded-full hover:bg-gray-200 text-gray-500 hover:text-blue-600">
+                            <button className="p-1.5 rounded-full hover:bg-gray-200 text-gray-500 hover:text-brand-600">
                                 <GitCompare size={20} />
                             </button>
-                            <button className="relative p-1.5 rounded-full hover:bg-gray-200 text-gray-500 hover:text-blue-600">
+                            <button className="relative p-1.5 rounded-full hover:bg-gray-200 text-gray-500 hover:text-brand-600">
                                 <Bell size={20} />
                                 <span className="absolute top-1 right-1 h-1.5 w-1.5 bg-red-500 rounded-full"></span>
                             </button>

@@ -23,9 +23,9 @@ export const MyCards = () => {
       </div>
 
       {/* Visual Kartu */}
-      <div className="bg-blue-600 p-5 rounded-xl text-white relative flex flex-col justify-between flex-grow max-h-[180px]">
+      <div className="bg-brand-600 p-5 rounded-xl text-white relative flex flex-col justify-between flex-grow max-h-[180px]">
         {/* Latar belakang abstrak */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-blue-700/50 to-transparent rounded-xl"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-brand-700/50 to-transparent rounded-xl"></div>
         
         {/* Baris Atas Kartu */}
         <div className="flex justify-between items-center z-10">
