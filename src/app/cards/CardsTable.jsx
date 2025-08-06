@@ -1,7 +1,7 @@
 const transactions = [
-    { bank: "BRI", card_number: "423598234979", name: "Muhammad Ilham Yahya", balance: "5000000" },
-    { bank: "Jago", card_number: "334668324534", name: "Muhammad Ilham Yahya", balance: "2450000" },
-    { bank: "BTN", card_number: "976345235545", name: "Muhammad Ilham Yahya", balance: "8000000" },
+    { id: "1", bank: "BRI", card_number: "423598234979", name: "Muhammad Ilham Yahya", balance: "5000000" },
+    { id: "2", bank: "Jago", card_number: "334668324534", name: "Muhammad Ilham Yahya", balance: "2450000" },
+    { id: "3", bank: "BTN", card_number: "976345235545", name: "Muhammad Ilham Yahya", balance: "8000000" },
 ];
 
 import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
@@ -75,7 +75,7 @@ export const CardsTable = () => {
                                 <td className="p-3 font-semibold text-gray-800">{tx.bank}</td>
                                 <td className="p-3 font-semibold text-gray-800">{tx.card_number && tx.card_number.slice(0, -6) + '******'}</td>
                                 <td className="p-3 font-semibold text-gray-800">{tx.name}</td>
-                                <td className="p-3 font-semibold text-gray-800 text-sm">Rp. {tx.balance}</td>
+                                <td className="p-3 font-semibold text-gray-800 text-sm">Rp{tx.balance}</td>
                                 <td className="p-3 text-gray-500">
                                     <MoreHorizontal size={20} />
                                 </td>

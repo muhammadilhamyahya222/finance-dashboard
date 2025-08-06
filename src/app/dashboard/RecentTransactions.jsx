@@ -1,18 +1,19 @@
 const transactions = [
-    { id: "INV_000076", activity: "Hotel Booking", date: "17 Apr, 2028", time: "03:45 PM", price: "$25,500", status: "Success" },
-    { id: "INV_000075", activity: "Flight Ticket Booking", date: "15 Apr, 2028", time: "11:30 AM", price: "$32,750", status: "Pending" },
-    { id: "INV_000074", activity: "Groceries", date: "15 Apr, 2028", time: "09:00 AM", price: "$1,200", status: "Success" },
+    { id: "1", activity: "KAI Sby-Jbr", price: "88000", type: "Expense", category: "Ticket", fund: "BRI" },
+    { id: "2", activity: "Hotel Booking", price: "150000", type: "Expense", category: "Ticket", fund: "BRI" },
+    { id: "3", activity: "Geprek Basmalah", price: "13000", type: "Income", category: "Food", fund: "BTN" },
 ];
+
 
 import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareCheckBig, SquareActivity, SquareCheck, SquareIcon } from "lucide-react";
 
-const StatusPill = ({ status }) => {
+const TypePill = ({ type }) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold";
-    const statusClasses = {
-        Success: "bg-green-100 text-green-800",
-        Pending: "bg-yellow-100 text-yellow-800",
+    const typeClasses = {
+        Income: "bg-green-100 text-green-800",
+        Expense: "bg-red-100 text-red-800",
     };
-    return <span className={`${baseClasses} ${statusClasses[status]}`}>{status}</span>;
+    return <span className={`${baseClasses} ${typeClasses[type]}`}>{type}</span>;
 };
 
 export const RecentTransactions = () => {
@@ -55,11 +56,10 @@ export const RecentTransactions = () => {
                                 <SquareIcon size={20}/>
                             </th>
                             <th className="p-3 font-semibold">Activity</th>
-                            <th className="p-3 font-semibold">Order ID</th>
-                            <th className="p-3 font-semibold">Date</th>
                             <th className="p-3 font-semibold">Price</th>
-                            <th className="p-3 font-semibold">Status</th>
-                            <th className="p-3 font-semibold"></th>
+                            <th className="p-3 font-semibold">Type</th>
+                            <th className="p-3 font-semibold">Category</th>
+                            <th className="p-3 font-semibold">Fund</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,15 +69,12 @@ export const RecentTransactions = () => {
                                     <SquareIcon size={20}/>
                                 </td>
                                 <td className="p-3 font-semibold text-gray-800">{tx.activity}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.id}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.date}</td>
                                 <td className="p-3 font-semibold text-gray-800">{tx.price}</td>
                                 <td className="p-3">
-                                    <StatusPill status={tx.status} />
+                                    <TypePill type={tx.type} />
                                 </td>
-                                <td className="p-3 text-gray-500">
-                                    <MoreHorizontal size={20} />
-                                </td>
+                                <td className="p-3 font-semibold text-gray-800">{tx.category}</td>
+                                <td className="p-3 font-semibold text-gray-800">{tx.fund}</td>
                             </tr>
                         ))}
                     </tbody>

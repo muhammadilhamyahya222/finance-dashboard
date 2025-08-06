@@ -2,6 +2,7 @@
 
 import { LayoutGrid, Settings, LogOut, Palette, CreditCard, ArrowRightLeft } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const NavItem = ({ icon, label, href, active, alertCount, children }) => (
     <div className={`relative flex items-center justify-between py-4 px-4 rounded-lg transition-colors ${active ? "bg-gray-100" : "hover:bg-gray-50"}`}>
@@ -27,11 +28,14 @@ const ThemeToggle = () => (
 );
 
 const Sidebar = () => {
+    
+    const pathname = usePathname();
+
     return (
         <aside className="absolute h-full w-72 bg-white rounded-3xl p-6 flex flex-col z-20">
             <div className="flex items-center gap-3 mb-10 pl-4">
                 <div className="bg-brand-600 p-2.5 rounded-lg">
-                    <p className="font-bold text-lg text-white">D</p>
+                    <p className="font-bold text-lg text-white">NG</p>
                 </div>
                 <h1 className="text-2xl font-bold text-gray-800">Ngrekap</h1>
             </div>
@@ -40,9 +44,9 @@ const Sidebar = () => {
             <div className="mb-8">
                 <p className="text-sm text-gray-400 font-normal mb-2 pl-4">Menu</p>
                 <nav className="flex flex-col space-y-1">
-                    <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active />
-                    <NavItem icon={<ArrowRightLeft size={20} />} label="Transaction" href="/transactions" />
-                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="/cards" />
+                    <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active={pathname === '/'} />
+                    <NavItem icon={<ArrowRightLeft size={20} />} label="Transaction" href="/transactions" active={pathname.startsWith('/transactions')} />
+                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="/cards" active={pathname.startsWith('/cards')} />
                 </nav>
             </div>
 

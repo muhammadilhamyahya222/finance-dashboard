@@ -17,16 +17,32 @@ const data = [
 ];
 
 const CustomTooltip = ({ active, payload, label }) => {
+    // 1. Cukup gunakan satu blok 'if' untuk memeriksa apakah tooltip aktif
     if (active && payload && payload.length) {
-        const spendingData = payload.find((p) => p.dataKey === "Spending");
-        if (spendingData) {
-            return (
-                <div className="bg-blue-600 text-white p-1 px-2 rounded-lg shadow-lg">
-                    <p className="font-bold">{`$${spendingData.value.toLocaleString()}`}</p>
-                </div>
-            );
-        }
+        return (
+            // 2. Buat satu container untuk tooltip
+            <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
+                {/* Tampilkan label (misal: "Jan", "Feb") */}
+                <p className="font-bold text-gray-800 mb-2">{label}</p>
+                
+                {/* 3. Lakukan perulangan pada 'payload' untuk menampilkan setiap data */}
+                {payload.map((pld, index) => (
+                    <div key={index} className="flex items-center justify-between text-sm py-0.5">
+                        <div className="flex items-center">
+                            {/* Ambil warna dari data untuk mencocokkan garis grafik */}
+                            <span className="w-2.5 h-2.5 rounded-full mr-2" style={{ backgroundColor: pld.color }}></span>
+                            <span className="text-gray-600">{pld.name}:</span>
+                        </div>
+                        <span className="font-bold text-gray-800 ml-4">
+                            {/* Format nilai mata uang */}
+                            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(pld.value)}
+                        </span>
+                    </div>
+                ))}
+            </div>
+        );
     }
+
     return null;
 };
 

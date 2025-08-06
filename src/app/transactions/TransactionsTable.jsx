@@ -1,7 +1,7 @@
 const transactions = [
-    { id: "INV_000076", activity: "Hotel Booking", date: "17 Apr, 2028", time: "03:45 PM", price: "$25,500", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "INV_000075", activity: "Flight Ticket Booking", date: "15 Apr, 2028", time: "11:30 AM", price: "$32,750", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "INV_000074", activity: "Groceries", date: "15 Apr, 2028", time: "09:00 AM", price: "$1,200", type: "Income", category: "Food", fund: "BTN" },
+    { id: "1", id_transaction: "INV_000075", activity: "KAI Sby-Jbr", date: "15 Apr, 2028", time: "11:30 AM", price: "88000", type: "Expense", category: "Ticket", fund: "BRI" },
+    { id: "2", id_transaction: "INV_000076", activity: "Hotel Booking", date: "17 Apr, 2028", time: "03:45 PM", price: "150000", type: "Expense", category: "Ticket", fund: "BRI" },
+    { id: "3", id_transaction: "INV_000074", activity: "Geprek Basmalah", date: "15 Apr, 2028", time: "09:00 AM", price: "13000", type: "Income", category: "Food", fund: "BTN" },
 ];
 
 import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
@@ -53,7 +53,7 @@ export const TransactionsTable = () => {
                 </div>
             </div>
             <div className="overflow-x-auto mt-3 rounded-2xl border border-gray-200">
-                <table className="min-w-full text-sm text-left">
+                <table className="min-w-full text-sm text-left table-fixed">
                     <thead className="text-gray-500 bg-gray-50">
                         <tr className="border-b border-gray-200">
                             <th className="p-3 text-gray-300">
@@ -75,10 +75,10 @@ export const TransactionsTable = () => {
                                 <td className="p-3 text-gray-300">
                                     <SquareIcon size={20} />
                                 </td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.activity}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.id}</td>
+                                <td className="p-3 w-1/5 font-semibold text-gray-800">{tx.activity}</td>
+                                <td className="p-3 font-semibold text-gray-800">{tx.id_transaction}</td>
                                 <td className="p-3 font-semibold text-gray-800">{tx.date}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.price}</td>
+                                <td className="p-3 font-semibold text-gray-800">Rp{tx.price}</td>
                                 <td className="p-3">
                                     <TypePill type={tx.type} />
                                 </td>
