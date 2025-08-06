@@ -1,9 +1,9 @@
 import Header from "./components/Header";
-import { Greeting } from "./components/dashboard/Greeting";
-import { MyCards } from "./components/dashboard/MyCards";
-import { RecentTransactions } from "./components/dashboard/RecentTransactions";
-import { StatsCard } from "./components/dashboard/StatsCard";
-import { TransactionsOverview } from "./components/dashboard/TransactionsOverview";
+import { Greeting } from "./dashboard/Greeting";
+import { MyCards } from "./dashboard/MyCards";
+import { RecentTransactions } from "./dashboard/RecentTransactions";
+import { StatsCard } from "./dashboard/StatsCard";
+import { TransactionsOverview } from "./dashboard/TransactionsOverview";
 
 export default function DashboardPage() {
     return (
@@ -35,7 +35,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-4">
-                <div className="bg-white p-8 rounded-3xl">
+                <div className="bg-white p-6 rounded-3xl">
                     
                     <RecentTransactions />
                 

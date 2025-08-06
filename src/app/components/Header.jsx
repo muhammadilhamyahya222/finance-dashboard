@@ -13,11 +13,11 @@ const Header = () => {
                 <div className="flex items-center gap-4">
                     {/* SEARCH BAR */}
                     <div className="relative">
-                        <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
                         <input
                             type="text"
                             placeholder="Search anything..."
-                            className="pl-11 pr-4 py-4 w-72 bg-gray-100 border-none rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                            className="pl-11 pr-4 py-4 w-72 bg-gray-100 border-none rounded-full text-sm font-semibold placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500"
                         />
                     </div>
 

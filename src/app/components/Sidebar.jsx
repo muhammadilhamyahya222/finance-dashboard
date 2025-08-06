@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGrid, BarChart2, Sun, Clock, Settings, LogOut, Palette } from "lucide-react";
+import { LayoutGrid, Settings, LogOut, Palette, CreditCard, ArrowRightLeft } from "lucide-react";
 import Link from "next/link";
 
 const NavItem = ({ icon, label, href, active, alertCount, children }) => (
@@ -8,7 +8,7 @@ const NavItem = ({ icon, label, href, active, alertCount, children }) => (
         <Link href={href || "#"} className="flex items-center grow">
             {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-brand-600 rounded-full"></div>}
             <div className="flex items-center">
-                <div className={`${active ? "text-brand-600" : "text-gray-500"}`}>{icon}</div>
+                <div className={`${active ? "text-gray-600" : "text-gray-500"}`}>{icon}</div>
                 <span className={`ml-3 text-sm font-semibold ${active ? "text-gray-900" : "text-gray-500"}`}>{label}</span>
             </div>
         </Link>
@@ -41,9 +41,8 @@ const Sidebar = () => {
                 <p className="text-sm text-gray-400 font-normal mb-2 pl-4">Menu</p>
                 <nav className="flex flex-col space-y-1">
                     <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active />
-                    <NavItem icon={<BarChart2 size={20} />} label="Analytics" href="#" />
-                    <NavItem icon={<Sun size={20} />} label="Insights" href="#" />
-                    <NavItem icon={<Clock size={20} />} label="Updates" href="#" />
+                    <NavItem icon={<ArrowRightLeft size={20} />} label="Transaction" href="/transactions" />
+                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="#" />
                 </nav>
             </div>
 

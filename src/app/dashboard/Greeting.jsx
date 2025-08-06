@@ -5,7 +5,6 @@ export const Greeting = () => {
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
       <div>
-        {/* Menggunakan nama dari Header.jsx Anda */}
         <h1 className="text-3xl font-bold text-gray-800">Good Morning, Ilham</h1>
         <p className="text-gray-500 mt-1">Here's an overview of your financial health and recent activity.</p>
       </div>
