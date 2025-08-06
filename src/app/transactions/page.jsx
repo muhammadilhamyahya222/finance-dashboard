@@ -7,7 +7,7 @@ export default function TransactionsPage() {
             <Header />
 
             <div className="mt-4">
-                <div className="bg-white p-6 rounded-3xl">
+                <div className="bg-white p-5 rounded-3xl">
                     
                     <TransactionsTable />
                 

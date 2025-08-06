@@ -19,11 +19,11 @@ export const TransactionsTable = () => {
     return (
         <div>
             <div className="flex items-center justify-end">
-                <button className="flex gap-2 items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-2 py-2 text-sm font-bold text-gray-800 hover:bg-gray-50">
+                <button className="flex gap-2 items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-3 py-3 text-md font-bold text-gray-800 hover:bg-gray-50">
                     <PlusCircle size={20} /> Add Transaction
                 </button>
             </div>
-            <div className="flex items-center justify-between border p-2 bg-gray-50 border-gray-200 rounded-2xl mt-3">
+            <div className="flex items-center justify-between border p-2 bg-gray-50 border-gray-200 rounded-2xl mt-4">
                 <div className="flex items-center gap-2">
                     <button className="flex items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-2 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50">
                         <Wallet size={20} />
