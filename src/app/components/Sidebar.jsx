@@ -42,7 +42,7 @@ const Sidebar = () => {
                 <nav className="flex flex-col space-y-1">
                     <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active />
                     <NavItem icon={<ArrowRightLeft size={20} />} label="Transaction" href="/transactions" />
-                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="#" />
+                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="/cards" />
                 </nav>
             </div>
 

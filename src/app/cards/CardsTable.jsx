@@ -1,7 +1,7 @@
 const transactions = [
-    { id: "INV_000076", activity: "Hotel Booking", date: "17 Apr, 2028", time: "03:45 PM", price: "$25,500", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "INV_000075", activity: "Flight Ticket Booking", date: "15 Apr, 2028", time: "11:30 AM", price: "$32,750", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "INV_000074", activity: "Groceries", date: "15 Apr, 2028", time: "09:00 AM", price: "$1,200", type: "Income", category: "Food", fund: "BTN" },
+    { bank: "BRI", card_number: "423598234979", name: "Muhammad Ilham Yahya", balance: "5000000" },
+    { bank: "Jago", card_number: "334668324534", name: "Muhammad Ilham Yahya", balance: "2450000" },
+    { bank: "BTN", card_number: "976345235545", name: "Muhammad Ilham Yahya", balance: "8000000" },
 ];
 
 import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
@@ -15,12 +15,12 @@ const TypePill = ({ type }) => {
     return <span className={`${baseClasses} ${typeClasses[type]}`}>{type}</span>;
 };
 
-export const TransactionsTable = () => {
+export const CardsTable = () => {
     return (
         <div>
             <div className="flex items-center justify-end">
                 <button className="flex gap-2 items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-3 py-3 text-md font-bold text-gray-800 hover:bg-gray-50">
-                    <PlusCircle size={20} /> Add Transaction
+                    <PlusCircle size={20} /> Add Card
                 </button>
             </div>
             <div className="flex items-center justify-between border p-2 bg-gray-50 border-gray-200 rounded-2xl mt-4">
@@ -28,7 +28,7 @@ export const TransactionsTable = () => {
                     <button className="flex items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-2 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50">
                         <Wallet size={20} />
                     </button>
-                    <h2 className="text-xl font-bold text-gray-800">Transaction History</h2>
+                    <h2 className="text-xl font-bold text-gray-800">Card List</h2>
                 </div>
                 <div className="flex items-center gap-2">
                     {/* SEARCH BAR */}
@@ -59,13 +59,10 @@ export const TransactionsTable = () => {
                             <th className="p-3 text-gray-300">
                                 <SquareIcon size={20} />
                             </th>
-                            <th className="p-3 font-semibold">Activity</th>
-                            <th className="p-3 font-semibold">Order ID</th>
-                            <th className="p-3 font-semibold">Date</th>
-                            <th className="p-3 font-semibold">Price</th>
-                            <th className="p-3 font-semibold">Type</th>
-                            <th className="p-3 font-semibold">Category</th>
-                            <th className="p-3 font-semibold">Fund</th>
+                            <th className="p-3 font-semibold">Bank</th>
+                            <th className="p-3 font-semibold">Card Number</th>
+                            <th className="p-3 font-semibold">Name</th>
+                            <th className="p-3 font-semibold">Balance</th>
                             <th className="p-3 font-semibold">Action</th>
                         </tr>
                     </thead>
@@ -75,16 +72,11 @@ export const TransactionsTable = () => {
                                 <td className="p-3 text-gray-300">
                                     <SquareIcon size={20} />
                                 </td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.activity}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.id}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.date}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.price}</td>
-                                <td className="p-3">
-                                    <TypePill type={tx.type} />
-                                </td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.category}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.fund}</td>
-                                <td className="p-3 flex text-gray-500">
+                                <td className="p-3 font-semibold text-gray-800">{tx.bank}</td>
+                                <td className="p-3 font-semibold text-gray-800">{tx.card_number && tx.card_number.slice(0, -6) + '******'}</td>
+                                <td className="p-3 font-semibold text-gray-800">{tx.name}</td>
+                                <td className="p-3 font-semibold text-gray-800 text-sm">Rp. {tx.balance}</td>
+                                <td className="p-3 text-gray-500">
                                     <MoreHorizontal size={20} />
                                 </td>
                             </tr>
