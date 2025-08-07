@@ -63,7 +63,7 @@ export const TransactionsOverview = () => {
 
             <div className="flex flex-col sm:flex-row justify-between items-end mt-4">
                 <div className="flex items-center space-x-2">
-                    <p className="text-3xl font-bold text-gray-800">$45,567.00</p>
+                    <p className="text-3xl font-bold text-gray-800">Rp47500000</p>
                     <div className="px-2 py-1 bg-gray-100 rounded-full">
                         <p className="text-[10px] text-green-500 font-semibold">↑ 4.9%</p>
                     </div>

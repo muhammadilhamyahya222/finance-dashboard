@@ -61,8 +61,8 @@ export const MyCards = () => {
       <div className="mt-6">
         <p className="text-sm text-gray-600">Spending limit</p>
         <div className="flex items-baseline space-x-2 mt-1">
-            <p className="text-xl font-bold text-gray-800">$3,884.00</p>
-            <p className="text-sm font-normal text-gray-400">used from $20,630.00</p>
+            <p className="text-xl font-bold text-gray-800">Rp3750000</p>
+            <p className="text-sm font-normal text-gray-400">used from Rp20000000</p>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
           <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: '18.8%' }}></div>
