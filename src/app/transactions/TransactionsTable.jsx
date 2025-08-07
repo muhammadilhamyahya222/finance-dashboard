@@ -1,10 +1,23 @@
+"use client";
+
+import { useState } from "react";
+import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
+import AddTransactionModal from "./components/AddTransactionModal";
+
 const transactions = [
     { id: "1", id_transaction: "INV_000075", activity: "KAI Sby-Jbr", date: "15 Apr, 2028", time: "11:30 AM", price: "88000", type: "Expense", category: "Ticket", fund: "BRI" },
     { id: "2", id_transaction: "INV_000076", activity: "Hotel Booking", date: "17 Apr, 2028", time: "03:45 PM", price: "150000", type: "Expense", category: "Ticket", fund: "BRI" },
     { id: "3", id_transaction: "INV_000074", activity: "Geprek Basmalah", date: "15 Apr, 2028", time: "09:00 AM", price: "13000", type: "Income", category: "Food", fund: "BTN" },
 ];
 
-import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(amount);
+};
 
 const TypePill = ({ type }) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold";
@@ -16,6 +29,27 @@ const TypePill = ({ type }) => {
 };
 
 export const TransactionsTable = () => {
+    const [transactions, setTransactions] = useState(transactions);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [openActionMenuId, setOpenActionMenuId] = useState(null);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const addTransaction = (newTransactionData) => {
+        const newTransactionWithId = { ...newTransactionData, id: Date.now().toString() };
+        setTransactions((prevTransaction) => [newTransactionWithId, ...prevTransaction]);
+    };
+
+    const deleteTransaction = (transactionId) => {
+        if (confirm("Are you sure you want to delete this transaction?")) {
+            setTransactions((prevTransaction) => prevTransaction.filter((transaction) => transaction.id !== transactionId));
+            setOpenActionMenuId(null); // Tutup menu setelah delete
+        }
+    };
+
+    const filteredTransaction = transactions.filter((transaction) => transaction.activity.toLowerCase().includes(searchQuery.toLowerCase()) || transaction.date.toLowerCase().includes(searchQuery.toLowerCase()));
     return (
         <div>
             <div className="flex items-center justify-end">

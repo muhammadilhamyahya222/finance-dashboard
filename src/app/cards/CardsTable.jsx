@@ -37,7 +37,7 @@ export const CardsTable = () => {
     const deleteCard = (cardId) => {
         if (confirm("Are you sure you want to delete this card?")) {
             setCards(prevCards => prevCards.filter(card => card.id !== cardId));
-            setOpenActionMenuId(null); // Tutup menu setelah delete
+            setOpenActionMenuId(null);
         }
     };
 
