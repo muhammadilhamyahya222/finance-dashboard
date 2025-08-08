@@ -4,11 +4,7 @@ import { useState } from "react";
 import { Search, MoreHorizontal, SquareIcon, PlusCircle, CreditCard } from "lucide-react";
 import AddCardModal from "./components/AddCardModal";
 
-const cardList = [
-    { id: "1", bank: "BRI", card_number: "423598234979", name: "Muhammad Ilham Yahya", balance: 5000000 },
-    { id: "2", bank: "Jago", card_number: "334668324534", name: "Muhammad Ilham Yahya", balance: 2450000 },
-    { id: "3", bank: "BTN", card_number: "976345235545", name: "Muhammad Ilham Yahya", balance: 8000000 },
-];
+import { useCardStore } from "@/store/cardStore";
 
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -20,7 +16,7 @@ const formatCurrency = (amount) => {
 };
 
 export const CardsTable = () => {
-    const [cards, setCards] = useState(cardList);
+    const { cards, addCard, deleteCard } = useCardStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [openActionMenuId, setOpenActionMenuId] = useState(null);
@@ -28,17 +24,17 @@ export const CardsTable = () => {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const addCard = (newCardData) => {
-        const newCardWithId = { ...newCardData, id: Date.now().toString() };
-        setCards((prevCards) => [newCardWithId, ...prevCards]);
+    const handleAddCard = (newCardData) => {
+        addCard(newCardData); // Memanggil action dari store
     };
 
-    const deleteCard = (cardId) => {
+    const handleDeleteCard = (cardId) => {
         if (confirm("Are you sure you want to delete this card?")) {
-            setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
+            deleteCard(cardId); // Memanggil action dari store
             setOpenActionMenuId(null);
         }
     };
+
 
     const filteredCards = cards.filter((card) => card.bank.toLowerCase().includes(searchQuery.toLowerCase()) || card.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -112,7 +108,7 @@ export const CardsTable = () => {
                                             <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                 Edit
                                             </a>
-                                            <button onClick={() => deleteCard(card.id)} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                            <button onClick={() => handleDeleteCard(card.id)} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                                 Delete
                                             </button>
                                         </div>
@@ -124,7 +120,7 @@ export const CardsTable = () => {
                 </table>
             </div>
 
-            {isModalOpen && <AddCardModal onClose={closeModal} onAddCard={addCard} />}
+            {isModalOpen && <AddCardModal onClose={closeModal} onAddCard={handleAddCard} />}
         </div>
     );
 };
