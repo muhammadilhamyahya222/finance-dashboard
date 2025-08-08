@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Landmark, CreditCard, Wallet, UserRound } from "lucide-react";
+import { X, Landmark, CreditCard, Wallet, UserRound, Calendar, Lock } from "lucide-react";
 import { useCardStore } from "@/store/cardStore";
 
 export default function AddCardModal({ onClose }) {
@@ -9,6 +9,8 @@ export default function AddCardModal({ onClose }) {
     const [cardNumber, setCardNumber] = useState("");
     const [cardName, setCardName] = useState("");
     const [cardBalance, setCardBalance] = useState("");
+    const [exp, setExp] = useState("");
+    const [cvv, setCvv] = useState("");
     const [errors, setErrors] = useState({});
 
     const addCard = useCardStore((state) => state.addCard);
@@ -20,6 +22,8 @@ export default function AddCardModal({ onClose }) {
         if (!bankName) newErrors.bankName = "Bank name is required.";
         if (!cardNumber) newErrors.cardNumber = "Card number is required.";
         if (!cardName) newErrors.cardName = "Card name is required.";
+        if (!exp) newErrors.exp = "EXP is required.";
+        if (!cvv) newErrors.cvv = "CVV is required.";
         if (!cardBalance) newErrors.cardBalance = "Card balance is required.";
 
         if (Object.keys(newErrors).length > 0) {
@@ -31,6 +35,8 @@ export default function AddCardModal({ onClose }) {
             bank: bankName,
             card_number: cardNumber,
             name: cardName,
+            exp: exp,
+            cvv: cvv,
             balance: parseFloat(cardBalance),
         });
 
@@ -90,6 +96,35 @@ export default function AddCardModal({ onClose }) {
                             {errors.cardName && <p className="text-red-500 text-xs mt-1">{errors.cardName}</p>}
                         </div>
 
+                        <div className="flex space-x-4">
+                            {/* Input EXP */}
+                            <div className="relative w-1/2">
+                                <label className="block text-sm font-semibold text-gray-600 mb-1">EXP</label>
+                                <Calendar size={20} className="absolute left-3 top-10 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="MM/YY"
+                                    value={exp}
+                                    onChange={(e) => setExp(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600"
+                                />
+                                {errors.exp && <p className="text-red-500 text-xs mt-1">{errors.exp}</p>}
+                            </div>
+                            {/* Input CVV */}
+                            <div className="relative w-1/2">
+                                <label className="block text-sm font-semibold text-gray-600 mb-1">CVV</label>
+                                <Lock size={20} className="absolute left-3 top-10 text-gray-400" />
+                                <input
+                                    type="number"
+                                    placeholder="e.g., 123"
+                                    value={cvv}
+                                    onChange={(e) => setCvv(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600"
+                                />
+                                {errors.cvv && <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>}
+                            </div>
+                        </div>
+
                         {/* Input Balance */}
                         <div className="relative">
                             <label className="block text-sm font-semibold text-gray-600 mb-1">Card Balance</label>
@@ -109,7 +144,7 @@ export default function AddCardModal({ onClose }) {
                         <button type="button" onClick={onClose} className="px-6 py-3 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                             Cancel
                         </button>
-                        <button type="submit" className="px-6 py-3 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                        <button type="submit" className="px-6 py-3 text-sm font-semibold text-white bg-brand-600 rounded-lg hover:bg-brand-700 transition-colors">
                             Save Card
                         </button>
                     </div>

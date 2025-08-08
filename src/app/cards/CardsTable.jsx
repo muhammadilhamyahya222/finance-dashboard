@@ -25,16 +25,15 @@ export const CardsTable = () => {
     const closeModal = () => setIsModalOpen(false);
 
     const handleAddCard = (newCardData) => {
-        addCard(newCardData); // Memanggil action dari store
+        addCard(newCardData);
     };
 
     const handleDeleteCard = (cardId) => {
         if (confirm("Are you sure you want to delete this card?")) {
-            deleteCard(cardId); // Memanggil action dari store
+            deleteCard(cardId);
             setOpenActionMenuId(null);
         }
     };
-
 
     const filteredCards = cards.filter((card) => card.bank.toLowerCase().includes(searchQuery.toLowerCase()) || card.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -81,6 +80,8 @@ export const CardsTable = () => {
                             <th className="p-3 font-semibold">Card Number</th>
                             <th className="p-3 font-semibold">Name</th>
                             <th className="p-3 font-semibold">Balance</th>
+                            <th className="p-3 font-semibold">Expired</th>
+                            <th className="p-3 font-semibold">CVV</th>
                             <th className="p-3 font-semibold text-center">Action</th>
                         </tr>
                     </thead>
@@ -94,6 +95,8 @@ export const CardsTable = () => {
                                 <td className="p-3 font-semibold text-gray-800">{card.card_number.slice(0, -6) + "******"}</td>
                                 <td className="p-3 font-semibold text-gray-800">{card.name}</td>
                                 <td className="p-3 font-bold text-gray-800 text-sm">{formatCurrency(card.balance)}</td>
+                                <td className="p-3 font-semibold text-gray-800">{card.exp}</td>
+                                <td className="p-3 font-semibold text-gray-800">{card.cvv.slice(3) + "***"}</td>
                                 <td className="p-3 relative">
                                     <div className="flex justify-center">
                                         <button
