@@ -50,7 +50,6 @@ body {
   }
 }
 
-/* 3. Buat kelas utilitas kustom untuk menerapkan animasi tersebut */
 .animate-scale-in {
   animation: scale-in 0.2s ease-out forwards;
 }

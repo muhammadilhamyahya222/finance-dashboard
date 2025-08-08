@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, Landmark, CreditCard, Wallet, UserRound } from "lucide-react";
+import { useCardStore } from "@/store/cardStore";
 
 export default function AddCardModal({ onClose }) {
     const [bankName, setBankName] = useState("");
@@ -10,13 +11,15 @@ export default function AddCardModal({ onClose }) {
     const [cardBalance, setCardBalance] = useState("");
     const [errors, setErrors] = useState({});
 
+    const addCard = useCardStore((state) => state.addCard);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const newErrors = {};
         if (!bankName) newErrors.bankName = "Bank name is required.";
         if (!cardNumber) newErrors.cardNumber = "Card number is required.";
-        if (!cardName) newErrors.cardNumber = "Card name is required.";
+        if (!cardName) newErrors.cardName = "Card name is required.";
         if (!cardBalance) newErrors.cardBalance = "Card balance is required.";
 
         if (Object.keys(newErrors).length > 0) {
@@ -24,21 +27,18 @@ export default function AddCardModal({ onClose }) {
             return;
         }
 
-        const newCardData = {
+        addCard({
             bank: bankName,
             card_number: cardNumber,
-            card_name: cardName,
-            balance: cardBalance,
-        };
+            name: cardName,
+            balance: parseFloat(cardBalance),
+        });
 
-        console.log("New Card Data:", newCardData);
-
-        alert("Card added successfully! (Check console for data)");
         onClose();
     };
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center z-50 transition-opacity duration-300 backdrop-blur-xs" onClick={onClose}>
+        <div className="fixed inset-0 flex justify-center items-center z-50 transition-opacity duration-300 backdrop-blur-sm" onClick={onClose}>
             <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md relative" onClick={(e) => e.stopPropagation()}>
                 <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
                     <X size={24} />
@@ -109,7 +109,7 @@ export default function AddCardModal({ onClose }) {
                         <button type="button" onClick={onClose} className="px-6 py-3 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                             Cancel
                         </button>
-                        <button type="submit" className="px-6 py-3 text-sm font-semibold text-white bg-brand-600 rounded-lg hover:bg-brand-700 transition-colors">
+                        <button type="submit" className="px-6 py-3 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                             Save Card
                         </button>
                     </div>
