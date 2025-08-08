@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import { CardsTable } from "./CardsTable";
 
-export default function TransactionsPage() {
+export default function CardsPage() {
     return (
         <div className="ml-4">
             <Header />

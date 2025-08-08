@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Landmark, ChevronDown, UserRound, LayoutGrid, Banknote, WalletCards, ReceiptText, ShoppingBag } from "lucide-react";
 
-export default function AddTransactionModal({ onClose, onAddTransaction }) {
+export default function EditTransactionModal({ onClose, onUpdateTransaction, transactionToEdit }) {
+    const formatDateForInput = (dateStr) => {
+        if (!dateStr) return "";
+        const dateObj = new Date(dateStr);
+        if (isNaN(dateObj)) return "";
+        return dateObj.toISOString().split("T")[0];
+    };
+
     const [activity, setActivity] = useState("");
     const [orderId, setOrderId] = useState("");
     const [date, setDate] = useState("");
@@ -12,6 +19,18 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
     const [category, setCategory] = useState("");
     const [fund, setFund] = useState("");
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (transactionToEdit) {
+            setActivity(transactionToEdit.activity || "");
+            setOrderId(transactionToEdit.id_transaction || "");
+            setDate(formatDateForInput(transactionToEdit.date));
+            setPrice(transactionToEdit.price || "");
+            setType(transactionToEdit.type || "");
+            setCategory(transactionToEdit.category || "");
+            setFund(transactionToEdit.fund || "");
+        }
+    }, [transactionToEdit]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -30,10 +49,9 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
             return;
         }
 
-        const newTransactionData = {
-            id: Date.now().toString(),
-            time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }),
-
+        const updatedTransactionData = {
+            ...transactionToEdit,
+            id: transactionToEdit.id,
             activity: activity,
             id_transaction: orderId,
             date: new Date(date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
@@ -43,7 +61,7 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
             fund: fund,
         };
 
-        onAddTransaction(newTransactionData);
+        onUpdateTransaction(updatedTransactionData);
         onClose();
     };
 
@@ -54,7 +72,8 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
                     <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
                         <X size={24} />
                     </button>
-                    <h2 className="text-2xl font-bold text-gray-800">Add New Transaction</h2>
+                    {/* 5. Ubah Judul Modal */}
+                    <h2 className="text-2xl font-bold text-gray-800">Edit Transaction</h2>
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
@@ -122,7 +141,7 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
                                 <select
                                     value={type}
                                     onChange={(e) => setType(e.target.value)}
-                                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600 appearance-none"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600 appearance-none"
                                 >
                                     <option value="" disabled>
                                         Choose Type
@@ -175,8 +194,8 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
                             <button type="button" onClick={onClose} className="px-6 py-3 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                                 Cancel
                             </button>
-                            <button type="submit" className="px-6 py-3 text-sm font-semibold text-white bg-brand-600 rounded-lg hover:bg-brand-700 transition-colors">
-                                Save Transaction
+                            <button type="submit" className="px-6 py-3 text-sm font-semibold text-white bg-brand-500 rounded-lg hover:bg-brand-600 transition-colors">
+                                Save Changes
                             </button>
                         </div>
                     </div>

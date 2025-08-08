@@ -1,21 +1,20 @@
 "use client";
 
 import { Search, GitCompare, Bell, ChevronDown } from "lucide-react";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 export default function Header() {
-
-    const pathname = usePathname(); 
+    const pathname = usePathname();
 
     const getTitle = () => {
-        if (pathname === '/') {
-            return 'Overview';
+        if (pathname === "/") {
+            return "Overview";
         }
 
         const title = pathname.substring(1);
         return title.charAt(0).toUpperCase() + title.slice(1);
     };
-  
+
     const pageTitle = getTitle();
 
     return (
@@ -66,4 +65,4 @@ export default function Header() {
             </div>
         </header>
     );
-};
+}

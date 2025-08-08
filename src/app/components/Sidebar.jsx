@@ -28,7 +28,6 @@ const ThemeToggle = () => (
 );
 
 const Sidebar = () => {
-    
     const pathname = usePathname();
 
     return (
@@ -44,9 +43,9 @@ const Sidebar = () => {
             <div className="mb-8">
                 <p className="text-sm text-gray-400 font-normal mb-2 pl-4">Menu</p>
                 <nav className="flex flex-col space-y-1">
-                    <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active={pathname === '/'} />
-                    <NavItem icon={<ArrowRightLeft size={20} />} label="Transaction" href="/transactions" active={pathname.startsWith('/transactions')} />
-                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="/cards" active={pathname.startsWith('/cards')} />
+                    <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active={pathname === "/"} />
+                    <NavItem icon={<ArrowRightLeft size={20} />} label="Transaction" href="/transactions" active={pathname.startsWith("/transactions")} />
+                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="/cards" active={pathname.startsWith("/cards")} />
                 </nav>
             </div>
 

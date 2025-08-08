@@ -1,73 +1,64 @@
-// File: src/app/components/dashboard/MyCards.jsx
-import { MoreHorizontal, Wifi } from 'lucide-react';
+import { MoreHorizontal, Wifi } from "lucide-react";
 
-// Komponen kecil untuk logo Mastercard
 const MastercardLogo = () => (
-  <div className="flex">
-    <div className="w-6 h-6 bg-red-500 rounded-full"></div>
-    <div className="w-6 h-6 bg-orange-400 rounded-full -ml-3 opacity-90"></div>
-  </div>
+    <div className="flex">
+        <div className="w-6 h-6 bg-red-500 rounded-full"></div>
+        <div className="w-6 h-6 bg-orange-400 rounded-full -ml-3 opacity-90"></div>
+    </div>
 );
 
 export const MyCards = () => {
-  return (
-    <div className="bg-white p-6 rounded-2xl h-full flex flex-col">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h2 className="text-xl font-bold text-gray-800">My Cards</h2>
-          <p className="text-sm text-gray-400">Total 3 cards</p>
-        </div>
-        <button className="text-gray-400 hover:text-gray-600">
-          <MoreHorizontal size={20} />
-        </button>
-      </div>
-
-      {/* Visual Kartu */}
-      <div className="bg-brand-600 p-4 rounded-xl text-white relative flex flex-col justify-between flex-grow min-h-[160px]">
-        {/* Latar belakang abstrak */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-brand-700/50 to-transparent rounded-xl"></div>
-        
-        {/* Baris Atas Kartu */}
-        <div className="flex justify-between items-center z-10">
-          <div className="flex items-center space-x-2">
-            <Wifi size={20} className="rotate-90" />
-            <span className="bg-white text-gray-800 text-xs px-2 py-1 rounded-full font-semibold">Active</span>
-          </div>
-          <MastercardLogo />
-        </div>
-
-        {/* Baris Bawah Kartu */}
-        <div className="flex flex-col sm:flex-row justify-between items-end mt-4">
-            <div>
-                <p className="text-[10px] opacity-70">Card Number</p>
-                <p className="font-mono text-xs tracking-wider">**** 6782</p>
+    return (
+        <div className="bg-white p-6 rounded-2xl h-full flex flex-col">
+            <div className="flex justify-between items-start mb-4">
+                <div>
+                    <h2 className="text-xl font-bold text-gray-800">My Cards</h2>
+                    <p className="text-sm text-gray-400">Total 3 cards</p>
+                </div>
+                <button className="text-gray-400 hover:text-gray-600">
+                    <MoreHorizontal size={20} />
+                </button>
             </div>
-             <div className='flex space-x-6'>
-             {/* <div> */}
-             <div className=''>
-                <p className="text-[10px] opacity-70">EXP</p>
-                <p className="font-mono text-xs">09/29</p>
-             </div>
-            {/* </div> */}
-            <div>
-                <p className="text-[10px] opacity-70">CVV</p>
-                <p className="font-mono text-xs">123</p>
-            </div>
-            </div>
-        </div>
-      </div>
 
-      {/* Info Spending Limit */}
-      <div className="mt-6">
-        <p className="text-sm text-gray-600">Spending limit</p>
-        <div className="flex items-baseline space-x-2 mt-1">
-            <p className="text-xl font-bold text-gray-800">Rp3750000</p>
-            <p className="text-sm font-normal text-gray-400">used from Rp20000000</p>
+            <div className="bg-brand-600 p-4 rounded-xl text-white relative flex flex-col justify-between flex-grow min-h-[160px]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-brand-700/50 to-transparent rounded-xl"></div>
+
+                <div className="flex justify-between items-center z-10">
+                    <div className="flex items-center space-x-2">
+                        <Wifi size={20} className="rotate-90" />
+                        <span className="bg-white text-gray-800 text-xs px-2 py-1 rounded-full font-semibold">Active</span>
+                    </div>
+                    <MastercardLogo />
+                </div>
+
+                <div className="flex flex-col sm:flex-row justify-between items-end mt-4">
+                    <div>
+                        <p className="text-[10px] opacity-70">Card Number</p>
+                        <p className="font-mono text-xs tracking-wider">**** 6782</p>
+                    </div>
+                    <div className="flex space-x-6">
+                        <div className="">
+                            <p className="text-[10px] opacity-70">EXP</p>
+                            <p className="font-mono text-xs">09/29</p>
+                        </div>
+                        <div>
+                            <p className="text-[10px] opacity-70">CVV</p>
+                            <p className="font-mono text-xs">123</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-6">
+                <p className="text-sm text-gray-600">Spending limit</p>
+                <div className="flex items-baseline space-x-2 mt-1">
+                    <p className="text-xl font-bold text-gray-800">Rp3750000</p>
+                    <p className="text-sm font-normal text-gray-400">used from Rp20000000</p>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                    <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: "18.8%" }}></div>
+                </div>
+            </div>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-          <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: '18.8%' }}></div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };

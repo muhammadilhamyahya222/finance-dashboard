@@ -4,8 +4,7 @@ const transactions = [
     { id: "3", activity: "Geprek Basmalah", price: "13000", type: "Income", category: "Food", fund: "BTN" },
 ];
 
-
-import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareCheckBig, SquareActivity, SquareCheck, SquareIcon } from "lucide-react";
+import { Search, ChevronDown, Filter, Wallet, SquareIcon } from "lucide-react";
 
 const TypePill = ({ type }) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold";
@@ -53,7 +52,7 @@ export const RecentTransactions = () => {
                     <thead className="text-gray-500 bg-gray-50">
                         <tr className="border-b border-gray-200">
                             <th className="p-3 text-gray-300">
-                                <SquareIcon size={20}/>
+                                <SquareIcon size={20} />
                             </th>
                             <th className="p-3 font-semibold">Activity</th>
                             <th className="p-3 font-semibold">Price</th>
@@ -66,7 +65,7 @@ export const RecentTransactions = () => {
                         {transactions.map((tx) => (
                             <tr key={tx.id} className="border-b last:border-0 hover:bg-gray-50">
                                 <td className="p-3 text-gray-300">
-                                    <SquareIcon size={20}/>
+                                    <SquareIcon size={20} />
                                 </td>
                                 <td className="p-3 font-semibold text-gray-800">{tx.activity}</td>
                                 <td className="p-3 font-semibold text-gray-800">{tx.price}</td>
