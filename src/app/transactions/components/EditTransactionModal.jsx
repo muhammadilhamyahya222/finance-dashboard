@@ -88,7 +88,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                     placeholder="e.g., 1 Fire Chicken"
                                     value={activity}
                                     onChange={(e) => setActivity(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600"
                                 />
                                 {errors.activity && <p className="text-red-500 text-xs mt-1">{errors.activity}</p>}
                             </div>
@@ -102,7 +102,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                     placeholder="Enter order id on the receipt"
                                     value={orderId}
                                     onChange={(e) => setOrderId(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600"
                                 />
                                 {errors.orderId && <p className="text-red-500 text-xs mt-1">{errors.orderId}</p>}
                             </div>
@@ -115,7 +115,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                     type="date"
                                     value={date}
                                     onChange={(e) => setDate(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-gray-600"
                                 />
                                 {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
                             </div>
@@ -129,7 +129,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                     placeholder="e.g., 50000"
                                     value={price}
                                     onChange={(e) => setPrice(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600"
                                 />
                                 {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
                             </div>
@@ -141,7 +141,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                 <select
                                     value={type}
                                     onChange={(e) => setType(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600 appearance-none"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600 appearance-none"
                                 >
                                     <option value="" disabled>
                                         Choose Type
@@ -162,7 +162,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                     placeholder="e.g., Food"
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300 font-semibold text-gray-600"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600"
                                 />
                                 {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                             </div>
@@ -174,7 +174,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                 <select
                                     value={fund}
                                     onChange={(e) => setFund(e.target.value)}
-                                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600 appearance-none"
+                                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-gray-600 appearance-none"
                                 >
                                     <option value="" disabled>
                                         Choose Fund

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Landmark, CreditCard, Wallet, UserRound, Calendar, Lock } from "lucide-react";
 import { useCardStore } from "@/store/cardStore";
 
-export default function AddCardModal({ onClose }) {
+export default function EditCardModal({ onClose, cardToEdit }) {
     const [bankName, setBankName] = useState("");
     const [cardNumber, setCardNumber] = useState("");
     const [cardName, setCardName] = useState("");
@@ -13,7 +13,18 @@ export default function AddCardModal({ onClose }) {
     const [cvv, setCvv] = useState("");
     const [errors, setErrors] = useState({});
 
-    const addCard = useCardStore((state) => state.addCard);
+    const updateCard = useCardStore((state) => state.updateCard);
+
+    useEffect(() => {
+        if (cardToEdit) {
+            setBankName(cardToEdit.bank || "");
+            setCardNumber(cardToEdit.card_number || "");
+            setCardName(cardToEdit.name || "");
+            setCardBalance(cardToEdit.balance || "");
+            setExp(cardToEdit.exp || "");
+            setCvv(cardToEdit.cvv || "");
+        }
+    }, [cardToEdit]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -31,15 +42,17 @@ export default function AddCardModal({ onClose }) {
             return;
         }
 
-        addCard({
+        const updatedCardData = {
+            ...cardToEdit,
             bank: bankName,
             card_number: cardNumber,
             name: cardName,
+            balance: parseFloat(cardBalance),
             exp: exp,
             cvv: cvv,
-            balance: parseFloat(cardBalance),
-        });
+        };
 
+        updateCard(updatedCardData);
         onClose();
     };
 
@@ -65,7 +78,7 @@ export default function AddCardModal({ onClose }) {
                     <X size={24} />
                 </button>
 
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Add New Card</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Card</h2>
 
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-5">
@@ -160,7 +173,7 @@ export default function AddCardModal({ onClose }) {
                             Cancel
                         </button>
                         <button type="submit" className="px-6 py-3 text-sm font-semibold text-white bg-brand-600 rounded-lg hover:bg-brand-700 transition-colors">
-                            Save Card
+                            Save Changes
                         </button>
                     </div>
                 </form>

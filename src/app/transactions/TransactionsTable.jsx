@@ -96,7 +96,7 @@ export const TransactionsTable = () => {
                             placeholder="Search"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="py-2 pl-11 w-60 bg-white border border-gray-200 rounded-xl text-sm font-semibold placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                            className="py-2 pl-11 w-60 bg-white border border-gray-200 text-gray-800 rounded-xl text-sm font-semibold placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
                         />
                     </div>
                     <div className="flex items-center space-x-2">

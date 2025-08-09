@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Search, MoreHorizontal, SquareIcon, PlusCircle, CreditCard } from "lucide-react";
 import AddCardModal from "./components/AddCardModal";
+import EditCardModal from "./components/EditCardModal";
 
 import { useCardStore } from "@/store/cardStore";
 
@@ -16,16 +17,23 @@ const formatCurrency = (amount) => {
 };
 
 export const CardsTable = () => {
-    const { cards, addCard, deleteCard } = useCardStore();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { cards, deleteCard } = useCardStore();
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [cardToEdit, setCardToEdit] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [openActionMenuId, setOpenActionMenuId] = useState(null);
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-
-    const handleAddCard = (newCardData) => {
-        addCard(newCardData);
+    const openAddModal = () => setIsAddModalOpen(true);
+    const closeAddModal = () => setIsAddModalOpen(false);
+    const openEditModal = (card) => {
+        setCardToEdit(card);
+        setIsEditModalOpen(true);
+        setOpenActionMenuId(null);
+    };
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
+        setCardToEdit(null);
     };
 
     const handleDeleteCard = (cardId) => {
@@ -41,7 +49,7 @@ export const CardsTable = () => {
         <div>
             <div className="flex items-center justify-end">
                 <button
-                    onClick={openModal}
+                    onClick={openAddModal}
                     className="flex gap-2 items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-3 py-3 text-md font-bold text-gray-800 hover:bg-gray-50 transition-colors"
                 >
                     <PlusCircle size={20} /> Add Card
@@ -63,7 +71,7 @@ export const CardsTable = () => {
                             placeholder="Search by bank or name"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="py-2 pl-11 w-60 bg-white border border-gray-200 rounded-xl text-sm font-semibold placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="py-2 pl-11 w-60 bg-white border border-gray-200 text-gray-800 rounded-xl text-sm font-semibold placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
                         />
                     </div>
                 </div>
@@ -81,7 +89,6 @@ export const CardsTable = () => {
                             <th className="p-3 font-semibold">Name</th>
                             <th className="p-3 font-semibold">Balance</th>
                             <th className="p-3 font-semibold">Expired</th>
-                            <th className="p-3 font-semibold">CVV</th>
                             <th className="p-3 font-semibold text-center">Action</th>
                         </tr>
                     </thead>
@@ -96,7 +103,6 @@ export const CardsTable = () => {
                                 <td className="p-3 font-semibold text-gray-800">{card.name}</td>
                                 <td className="p-3 font-bold text-gray-800 text-sm">{formatCurrency(card.balance)}</td>
                                 <td className="p-3 font-semibold text-gray-800">{card.exp}</td>
-                                <td className="p-3 font-semibold text-gray-800">{card.cvv.slice(3) + "***"}</td>
                                 <td className="p-3 relative">
                                     <div className="flex justify-center">
                                         <button
@@ -108,9 +114,9 @@ export const CardsTable = () => {
                                     </div>
                                     {openActionMenuId === card.id && (
                                         <div className="absolute right-4 mt-2 w-32 bg-white border rounded-lg shadow-lg z-10">
-                                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <button onClick={() => openEditModal(card)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                 Edit
-                                            </a>
+                                            </button>
                                             <button onClick={() => handleDeleteCard(card.id)} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                                 Delete
                                             </button>
@@ -123,7 +129,8 @@ export const CardsTable = () => {
                 </table>
             </div>
 
-            {isModalOpen && <AddCardModal onClose={closeModal} onAddCard={handleAddCard} />}
+            {isAddModalOpen && <AddCardModal onClose={closeAddModal} />}
+            {isEditModalOpen && <EditCardModal onClose={closeEditModal} cardToEdit={cardToEdit} />}
         </div>
     );
 };
