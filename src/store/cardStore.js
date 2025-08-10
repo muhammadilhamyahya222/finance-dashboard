@@ -53,7 +53,6 @@ export const useCardStore = create((set) => ({
     updateCard: (updatedCard) => {
         set((state) => ({
             cards: state.cards.map((card) => 
-                // Jika ID kartu cocok, ganti dengan data yang baru. Jika tidak, biarkan seperti semula.
                 card.id === updatedCard.id ? updatedCard : card
             )
         }));

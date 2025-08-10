@@ -4,12 +4,7 @@ import { useState } from "react";
 import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
 import AddTransactionModal from "./components/AddTransactionModal";
 import EditTransactionModal from "./components/EditTransactionModal";
-
-const transactionsList = [
-    { id: "1", id_transaction: "INV_000075", activity: "KAI Sby-Jbr", date: "15 Apr, 2028", time: "11:30 AM", price: "88000", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "2", id_transaction: "INV_000076", activity: "Hotel Booking", date: "17 Apr, 2028", time: "03:45 PM", price: "150000", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "3", id_transaction: "INV_000074", activity: "Geprek Basmalah", date: "15 Apr, 2028", time: "09:00 AM", price: "13000", type: "Income", category: "Food", fund: "BTN" },
-];
+import { useTransactionStore } from "@/store/transactionStore";
 
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -30,20 +25,15 @@ const TypePill = ({ type }) => {
 };
 
 export const TransactionsTable = () => {
-    const [transactions, setTransactions] = useState(transactionsList);
+    const { transactions, deleteTransaction } = useTransactionStore();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [openActionMenuId, setOpenActionMenuId] = useState(null);
 
-    const openModal = () => setIsAddModalOpen(true);
-    const closeModal = () => setIsAddModalOpen(false);
-
-    const addTransaction = (newTransactionData) => {
-        const newTransactionWithId = { ...newTransactionData, id: Date.now().toString() };
-        setTransactions((prevTransaction) => [newTransactionWithId, ...prevTransaction]);
-    };
+    const openAddModal = () => setIsAddModalOpen(true);
+    const closeAddModal = () => setIsAddModalOpen(false);
 
     const openEditModal = (transaction) => {
         setSelectedTransaction(transaction);
@@ -56,13 +46,9 @@ export const TransactionsTable = () => {
         setSelectedTransaction(null);
     };
 
-    const updateTransaction = (updatedTransactionData) => {
-        setTransactions((prevTransactions) => prevTransactions.map((transaction) => (transaction.id === updatedTransactionData.id ? updatedTransactionData : transaction)));
-    };
-
-    const deleteTransaction = (transactionId) => {
+    const handleDeleteTransaction = (transactionId) => {
         if (confirm("Are you sure you want to delete this transaction?")) {
-            setTransactions((prevTransaction) => prevTransaction.filter((transaction) => transaction.id !== transactionId));
+            deleteTransaction(transactionId);
             setOpenActionMenuId(null);
         }
     };
@@ -74,7 +60,7 @@ export const TransactionsTable = () => {
     return (
         <div>
             <div className="flex items-center justify-end">
-                <button onClick={openModal} className="flex gap-2 items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-3 py-3 text-md font-bold text-gray-800 hover:bg-gray-50">
+                <button onClick={openAddModal} className="flex gap-2 items-center space-x-2 border border-gray-200 bg-gray-100 rounded-xl px-3 py-3 text-md font-bold text-gray-800 hover:bg-gray-50">
                     <PlusCircle size={20} /> Add Transaction
                 </button>
             </div>
@@ -158,7 +144,7 @@ export const TransactionsTable = () => {
                                             <button onClick={() => openEditModal(transaction)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                 Edit
                                             </button>
-                                            <button onClick={() => deleteTransaction(transaction.id)} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                            <button onClick={() => handleDeleteTransaction(transaction.id)} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                                                 Delete
                                             </button>
                                         </div>
@@ -169,8 +155,8 @@ export const TransactionsTable = () => {
                     </tbody>
                 </table>
             </div>
-            {isAddModalOpen && <AddTransactionModal onClose={closeModal} onAddTransaction={addTransaction} />}
-            {isEditModalOpen && <EditTransactionModal onClose={closeEditModal} onUpdateTransaction={updateTransaction} transactionToEdit={selectedTransaction} />}
+            {isAddModalOpen && <AddTransactionModal onClose={closeAddModal} />}
+            {isEditModalOpen && <EditTransactionModal onClose={closeEditModal} transactionToEdit={selectedTransaction} />}
         </div>
     );
 };

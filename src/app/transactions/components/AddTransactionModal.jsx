@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { X, Landmark, ChevronDown, UserRound, LayoutGrid, Banknote, WalletCards, ReceiptText, ShoppingBag } from "lucide-react";
+import { useTransactionStore } from "@/store/transactionStore";
+import { useCardStore } from "@/store/cardStore";
 
-export default function AddTransactionModal({ onClose, onAddTransaction }) {
+export default function AddTransactionModal({ onClose }) {
     const [activity, setActivity] = useState("");
     const [orderId, setOrderId] = useState("");
     const [date, setDate] = useState("");
@@ -12,6 +14,9 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
     const [category, setCategory] = useState("");
     const [fund, setFund] = useState("");
     const [errors, setErrors] = useState({});
+
+    const addTransaction = useTransactionStore((state) => state.addTransaction);
+    const cards = useCardStore((state) => state.cards);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,7 +48,7 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
             fund: fund,
         };
 
-        onAddTransaction(newTransactionData);
+        addTransaction(newTransactionData);
         onClose();
     };
 
@@ -160,9 +165,9 @@ export default function AddTransactionModal({ onClose, onAddTransaction }) {
                                     <option value="" disabled>
                                         Choose Fund
                                     </option>
-                                    <option value="BRI">BRI</option>
-                                    <option value="BTN">BTN</option>
-                                    <option value="Jago">Jago</option>
+                                    {cards.map(card => (
+                                        <option key={card.id} value={card.bank}>{card.bank}</option>
+                                    ))}
                                 </select>
                                 <ChevronDown size={20} className="absolute right-4 top-10 text-gray-400 pointer-events-none" />
                                 {errors.fund && <p className="text-red-500 text-xs mt-1">{errors.fund}</p>}
