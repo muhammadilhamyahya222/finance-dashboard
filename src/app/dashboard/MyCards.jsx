@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ChevronDown, Wifi } from "lucide-react";
-import { useCardStore } from "@/store/cardStore";
+import { useCardStore } from "@/store/archive/cardStore";
 
 const MastercardLogo = () => (
     <div className="flex">
@@ -68,7 +68,10 @@ export const MyCards = () => {
                     <p className="text-sm text-gray-400">Total {cards.length} cards</p>
                 </div>
                 <div className="relative">
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex items-center space-x-2 text-gray-600 bg-gray-50 px-3 py-1 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors">
+                    <button
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className="flex items-center space-x-2 text-gray-600 bg-gray-50 px-3 py-1 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors"
+                    >
                         <span className="font-semibold text-sm">{selectedCard.bank}</span>
                         <ChevronDown size={16} className={`transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
                     </button>

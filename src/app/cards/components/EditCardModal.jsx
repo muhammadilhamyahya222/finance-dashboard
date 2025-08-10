@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, Landmark, CreditCard, Wallet, UserRound, Calendar, Lock } from "lucide-react";
-import { useCardStore } from "@/store/cardStore";
+import { useCardStore } from "@/store/archive/cardStore";
 
 export default function EditCardModal({ onClose, cardToEdit }) {
     const [bankName, setBankName] = useState("");
@@ -57,7 +57,7 @@ export default function EditCardModal({ onClose, cardToEdit }) {
     };
 
     const handleExpChange = (e) => {
-        let numericValue = e.target.value.replace(/\D/g, '');
+        let numericValue = e.target.value.replace(/\D/g, "");
 
         if (numericValue.length > 4) {
             numericValue = numericValue.slice(0, 4);

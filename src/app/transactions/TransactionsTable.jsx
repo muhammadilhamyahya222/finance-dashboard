@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
 import AddTransactionModal from "./components/AddTransactionModal";
 import EditTransactionModal from "./components/EditTransactionModal";
-import { useTransactionStore } from "@/store/transactionStore";
+import { useTransactionStore } from "@/store/archive/transactionStore";
+import { useAppStore } from "@/store/appStore";
 
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -25,7 +26,7 @@ const TypePill = ({ type }) => {
 };
 
 export const TransactionsTable = () => {
-    const { transactions, deleteTransaction } = useTransactionStore();
+    const { transactions, deleteTransaction } = useAppStore();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);

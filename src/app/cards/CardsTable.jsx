@@ -5,7 +5,8 @@ import { Search, MoreHorizontal, SquareIcon, PlusCircle, CreditCard } from "luci
 import AddCardModal from "./components/AddCardModal";
 import EditCardModal from "./components/EditCardModal";
 
-import { useCardStore } from "@/store/cardStore";
+import { useCardStore } from "@/store/archive/cardStore";
+import { useAppStore } from "@/store/appStore";
 
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -17,7 +18,7 @@ const formatCurrency = (amount) => {
 };
 
 export const CardsTable = () => {
-    const { cards, deleteCard } = useCardStore();
+    const { cards, deleteCard } = useAppStore();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [cardToEdit, setCardToEdit] = useState(null);

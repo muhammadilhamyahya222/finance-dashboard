@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { X, Landmark, ChevronDown, UserRound, LayoutGrid, Banknote, WalletCards, ReceiptText, ShoppingBag } from "lucide-react";
-import { useTransactionStore } from "@/store/transactionStore";
-import { useCardStore } from "@/store/cardStore";
+import { useTransactionStore } from "@/store/archive/transactionStore";
+import { useCardStore } from "@/store/archive/cardStore";
+import { useAppStore } from "@/store/appStore";
 
 export default function AddTransactionModal({ onClose }) {
     const [activity, setActivity] = useState("");
@@ -15,7 +16,7 @@ export default function AddTransactionModal({ onClose }) {
     const [fund, setFund] = useState("");
     const [errors, setErrors] = useState({});
 
-    const addTransaction = useTransactionStore((state) => state.addTransaction);
+    const addTransactionAndUpdateBalance = useAppStore((state) => state.addTransactionAndUpdateBalance);
     const cards = useCardStore((state) => state.cards);
 
     const handleSubmit = (e) => {
@@ -48,7 +49,7 @@ export default function AddTransactionModal({ onClose }) {
             fund: fund,
         };
 
-        addTransaction(newTransactionData);
+        addTransactionAndUpdateBalance(newTransactionData);
         onClose();
     };
 
@@ -165,8 +166,10 @@ export default function AddTransactionModal({ onClose }) {
                                     <option value="" disabled>
                                         Choose Fund
                                     </option>
-                                    {cards.map(card => (
-                                        <option key={card.id} value={card.bank}>{card.bank}</option>
+                                    {cards.map((card) => (
+                                        <option key={card.id} value={card.bank}>
+                                            {card.bank}
+                                        </option>
                                     ))}
                                 </select>
                                 <ChevronDown size={20} className="absolute right-4 top-10 text-gray-400 pointer-events-none" />

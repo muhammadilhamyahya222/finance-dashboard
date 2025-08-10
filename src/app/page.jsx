@@ -9,7 +9,7 @@ import { StatsCard } from "./dashboard/StatsCard";
 import { TransactionsOverview } from "./dashboard/TransactionsOverview";
 
 // 1. Import store Anda
-import { useCardStore } from "../store/cardStore";
+import { useCardStore } from "../store/archive/cardStore";
 
 export default function DashboardPage() {
     // 2. Ambil state 'cards' dari store
@@ -35,7 +35,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
-            
+
             {/* Sisa JSX Anda... */}
             <div className="mt-4">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
