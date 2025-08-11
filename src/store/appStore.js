@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 const initialCards = [
     { id: "1", bank: "BRI", card_number: "423598234979", name: "Muhammad Ilham Yahya", balance: 5000000, color: "blue", exp: "12/28", cvv: "123" },
@@ -13,7 +13,6 @@ const initialTransactions = [
 ];
 
 export const useAppStore = create((set, get) => ({
-
     cards: initialCards,
     transactions: initialTransactions,
 
@@ -28,89 +27,99 @@ export const useAppStore = create((set, get) => ({
     },
     updateCard: (updatedCard) => {
         set((state) => ({
-            cards: state.cards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
+            cards: state.cards.map((card) => (card.id === updatedCard.id ? updatedCard : card)),
         }));
     },
     deleteCard: (cardId) => {
         set((state) => ({
-            cards: state.cards.filter((card) => card.id !== cardId)
+            cards: state.cards.filter((card) => card.id !== cardId),
         }));
     },
 
     // --- Transaction ---
     addTransactionAndUpdateBalance: (newTransactionData) => {
-        set((state) => {
-            let updatedCards = [...state.cards];
-            const transactionPrice = parseFloat(newTransactionData.price);
-            const cardIndex = state.cards.findIndex(card => card.bank === newTransactionData.fund);
+        const { cards } = get();
+        const transactionPrice = parseFloat(newTransactionData.price);
+        const cardIndex = cards.findIndex((card) => card.bank === newTransactionData.fund);
 
-            if (cardIndex !== -1) {
-                const cardToUpdate = { ...updatedCards[cardIndex] };
-                if (newTransactionData.type === 'Expense') {
-                    cardToUpdate.balance -= transactionPrice;
-                } else if (newTransactionData.type === 'Income') {
-                    cardToUpdate.balance += transactionPrice;
-                }
-                updatedCards[cardIndex] = cardToUpdate;
+        if (cardIndex === -1) {
+            console.error("Card not found for transaction fund.");
+            return false;
+        }
+
+        const cardToUpdate = { ...cards[cardIndex] };
+
+        if (newTransactionData.type === "Expense") {
+            if (cardToUpdate.balance < transactionPrice) {
+                console.warn("Insufficient balance.");
+                return false;
             }
+            cardToUpdate.balance -= transactionPrice;
+        } else if (newTransactionData.type === "Income") {
+            cardToUpdate.balance += transactionPrice;
+        }
 
-            return {
-                transactions: [newTransactionData, ...state.transactions],
-                cards: updatedCards
-            };
+        const updatedCards = [...cards];
+        updatedCards[cardIndex] = cardToUpdate;
+
+        set({
+            transactions: [newTransactionData, ...get().transactions],
+            cards: updatedCards,
         });
+
+        return true;
     },
 
     deleteTransaction: (transactionId) => {
         set((state) => {
-            const transactionToDelete = state.transactions.find(t => t.id === transactionId);
+            const transactionToDelete = state.transactions.find((t) => t.id === transactionId);
             if (!transactionToDelete) return {};
 
             let updatedCards = [...state.cards];
             const transactionPrice = parseFloat(transactionToDelete.price);
-            const cardIndex = state.cards.findIndex(card => card.bank === transactionToDelete.fund);
+            const cardIndex = state.cards.findIndex((card) => card.bank === transactionToDelete.fund);
 
             if (cardIndex !== -1) {
                 const cardToUpdate = { ...updatedCards[cardIndex] };
-                if (transactionToDelete.type === 'Expense') {
+                if (transactionToDelete.type === "Expense") {
                     cardToUpdate.balance += transactionPrice;
-                } else if (transactionToDelete.type === 'Income') {
+                } else if (transactionToDelete.type === "Income") {
                     cardToUpdate.balance -= transactionPrice;
                 }
                 updatedCards[cardIndex] = cardToUpdate;
             }
 
             return {
-                transactions: state.transactions.filter(t => t.id !== transactionId),
-                cards: updatedCards
+                transactions: state.transactions.filter((t) => t.id !== transactionId),
+                cards: updatedCards,
             };
         });
     },
 
     updateTransaction: (updatedTransaction) => {
         set((state) => {
-            const originalTransaction = state.transactions.find(t => t.id === updatedTransaction.id);
+            const originalTransaction = state.transactions.find((t) => t.id === updatedTransaction.id);
             if (!originalTransaction) return {};
 
             let updatedCards = [...state.cards];
 
             const originalPrice = parseFloat(originalTransaction.price);
-            const originalCardIndex = state.cards.findIndex(c => c.bank === originalTransaction.fund);
+            const originalCardIndex = state.cards.findIndex((c) => c.bank === originalTransaction.fund);
             if (originalCardIndex !== -1) {
-                if (originalTransaction.type === 'Expense') updatedCards[originalCardIndex].balance += originalPrice;
+                if (originalTransaction.type === "Expense") updatedCards[originalCardIndex].balance += originalPrice;
                 else updatedCards[originalCardIndex].balance -= originalPrice;
             }
 
             const newPrice = parseFloat(updatedTransaction.price);
-            const newCardIndex = updatedCards.findIndex(c => c.bank === updatedTransaction.fund);
+            const newCardIndex = updatedCards.findIndex((c) => c.bank === updatedTransaction.fund);
             if (newCardIndex !== -1) {
-                if (updatedTransaction.type === 'Expense') updatedCards[newCardIndex].balance -= newPrice;
+                if (updatedTransaction.type === "Expense") updatedCards[newCardIndex].balance -= newPrice;
                 else updatedCards[newCardIndex].balance += newPrice;
             }
-            
+
             return {
-                transactions: state.transactions.map(t => t.id === updatedTransaction.id ? updatedTransaction : t),
-                cards: updatedCards
+                transactions: state.transactions.map((t) => (t.id === updatedTransaction.id ? updatedTransaction : t)),
+                cards: updatedCards,
             };
         });
     },

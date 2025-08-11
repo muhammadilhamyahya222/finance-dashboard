@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { X, Landmark, ChevronDown, UserRound, LayoutGrid, Banknote, WalletCards, ReceiptText, ShoppingBag } from "lucide-react";
-import { useTransactionStore } from "@/store/archive/transactionStore";
-import { useCardStore } from "@/store/archive/cardStore";
 import { useAppStore } from "@/store/appStore";
 
 export default function AddTransactionModal({ onClose }) {
@@ -16,8 +14,7 @@ export default function AddTransactionModal({ onClose }) {
     const [fund, setFund] = useState("");
     const [errors, setErrors] = useState({});
 
-    const addTransactionAndUpdateBalance = useAppStore((state) => state.addTransactionAndUpdateBalance);
-    const cards = useCardStore((state) => state.cards);
+    const { addTransactionAndUpdateBalance, cards } = useAppStore();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -26,7 +23,7 @@ export default function AddTransactionModal({ onClose }) {
         if (!activity) newErrors.activity = "Activity name is required.";
         if (!orderId) newErrors.orderId = "Order Id number is required.";
         if (!date) newErrors.date = "Date is required.";
-        if (!price) newErrors.price = "Price balance is required.";
+        if (!price) newErrors.price = "Price is required.";
         if (!type) newErrors.type = "Type is required.";
         if (!category) newErrors.category = "Category is required.";
         if (!fund) newErrors.fund = "Fund Source is required.";
@@ -39,18 +36,25 @@ export default function AddTransactionModal({ onClose }) {
         const newTransactionData = {
             id: Date.now().toString(),
             time: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }),
-
-            activity: activity,
+            activity,
             id_transaction: orderId,
             date: new Date(date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
-            price: price,
-            type: type,
-            category: category,
-            fund: fund,
+            price,
+            type,
+            category,
+            fund,
         };
 
-        addTransactionAndUpdateBalance(newTransactionData);
-        onClose();
+        const success = addTransactionAndUpdateBalance(newTransactionData);
+
+        if (success) {
+            onClose();
+        } else {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                price: "Insufficient balance for this expense."
+            }));
+        }
     };
 
     return (
