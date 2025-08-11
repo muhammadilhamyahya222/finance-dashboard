@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Search, MoreHorizontal, SquareIcon, PlusCircle, CreditCard } from "lucide-react";
 import AddCardModal from "./components/AddCardModal";
 import EditCardModal from "./components/EditCardModal";
-
-import { useCardStore } from "@/store/archive/cardStore";
 import { useAppStore } from "@/store/appStore";
 
 const formatCurrency = (amount) => {

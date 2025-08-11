@@ -7,17 +7,27 @@ import { MyCards } from "./dashboard/MyCards";
 import { RecentTransactions } from "./dashboard/RecentTransactions";
 import { StatsCard } from "./dashboard/StatsCard";
 import { TransactionsOverview } from "./dashboard/TransactionsOverview";
-
-// 1. Import store Anda
-import { useCardStore } from "../store/archive/cardStore";
+import { useAppStore } from "@/store/appStore";
 
 export default function DashboardPage() {
-    // 2. Ambil state 'cards' dari store
-    // Selector (state => state.cards) memastikan komponen ini hanya render ulang jika 'cards' berubah
-    const cards = useCardStore((state) => state.cards);
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(amount);
+    };
 
-    // 3. Hitung total balance seperti sebelumnya
+    const cards = useAppStore((state) => state.cards);
+    const transactions = useAppStore((state) => state.transactions);
+
     const totalBalance = cards.reduce((sum, card) => sum + card.balance, 0);
+    const totalIncome = transactions.filter((t) => t.type === "Income").reduce((sum, t) => sum + parseFloat(t.price), 0);
+
+    const totalExpenses = transactions.filter((t) => t.type === "Expense").reduce((sum, t) => sum + parseFloat(t.price), 0);
+
+    const totalSavings = totalIncome - totalExpenses;
 
     return (
         <div className="ml-4">
@@ -27,16 +37,14 @@ export default function DashboardPage() {
                 <div className="bg-white p-5 rounded-3xl">
                     <Greeting />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                        {/* 4. Nilai ini sekarang akan selalu sinkron! ✨ */}
-                        <StatsCard type="balance" title="Net worth" amount={totalBalance.toString()} subtitle="Net worth across all." />
-                        <StatsCard type="income" title="Total Income" amount="Rp5500000" subtitle="Total income this month" />
-                        <StatsCard type="expenses" title="Total Expenses" amount="Rp3750000" subtitle="Total expenses" />
-                        <StatsCard type="savings" title="Savings" amount="Rp1750000" subtitle="This month savings" />
+                        <StatsCard type="balance" title="Net worth" amount={formatCurrency(totalBalance.toString())} subtitle="Net worth across all." />
+                        <StatsCard type="income" title="Total Income" amount={formatCurrency(totalIncome.toString())} subtitle="Total income this month" />
+                        <StatsCard type="expenses" title="Total Expenses" amount={formatCurrency(totalExpenses.toString())} subtitle="Total expenses" />
+                        <StatsCard type="savings" title="Savings" amount={formatCurrency(totalSavings.toString())} subtitle="This month savings" />
                     </div>
                 </div>
             </div>
 
-            {/* Sisa JSX Anda... */}
             <div className="mt-4">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     <div className="lg:col-span-2">
