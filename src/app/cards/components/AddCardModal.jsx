@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { X, Landmark, CreditCard, Wallet, UserRound, Calendar, Lock } from "lucide-react";
-import { useCardStore } from "@/store/archive/cardStore";
 import { useAppStore } from "@/store/appStore";
 
 export default function AddCardModal({ onClose }) {
@@ -14,7 +13,7 @@ export default function AddCardModal({ onClose }) {
     const [cvv, setCvv] = useState("");
     const [errors, setErrors] = useState({});
 
-    const addTransactionAndUpdateBalance = useAppStore((state) => state.addTransactionAndUpdateBalance);
+    const addCard = useAppStore((state) => state.addCard);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,7 +31,7 @@ export default function AddCardModal({ onClose }) {
             return;
         }
 
-        addTransactionAndUpdateBalance({
+        addCard({
             bank: bankName,
             card_number: cardNumber,
             name: cardName,

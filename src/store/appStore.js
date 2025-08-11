@@ -97,30 +97,41 @@ export const useAppStore = create((set, get) => ({
     },
 
     updateTransaction: (updatedTransaction) => {
-        set((state) => {
-            const originalTransaction = state.transactions.find((t) => t.id === updatedTransaction.id);
-            if (!originalTransaction) return {};
+        const { transactions, cards } = get();
+        const originalTransaction = transactions.find(t => t.id === updatedTransaction.id);
+        if (!originalTransaction) return false;
 
-            let updatedCards = [...state.cards];
-
-            const originalPrice = parseFloat(originalTransaction.price);
-            const originalCardIndex = state.cards.findIndex((c) => c.bank === originalTransaction.fund);
-            if (originalCardIndex !== -1) {
-                if (originalTransaction.type === "Expense") updatedCards[originalCardIndex].balance += originalPrice;
-                else updatedCards[originalCardIndex].balance -= originalPrice;
+        let tempCards = JSON.parse(JSON.stringify(cards));
+        
+        const originalPrice = parseFloat(originalTransaction.price);
+        const originalCardIndex = tempCards.findIndex(c => c.bank === originalTransaction.fund);
+        if (originalCardIndex !== -1) {
+            if (originalTransaction.type === 'Expense') {
+                tempCards[originalCardIndex].balance += originalPrice;
+            } else { 
+                tempCards[originalCardIndex].balance -= originalPrice;
             }
+        }
 
-            const newPrice = parseFloat(updatedTransaction.price);
-            const newCardIndex = updatedCards.findIndex((c) => c.bank === updatedTransaction.fund);
-            if (newCardIndex !== -1) {
-                if (updatedTransaction.type === "Expense") updatedCards[newCardIndex].balance -= newPrice;
-                else updatedCards[newCardIndex].balance += newPrice;
+        const newPrice = parseFloat(updatedTransaction.price);
+        const newCardIndex = tempCards.findIndex(c => c.bank === updatedTransaction.fund);
+        if (newCardIndex !== -1) {
+            if (updatedTransaction.type === 'Expense') {
+                if (tempCards[newCardIndex].balance < newPrice) {
+                    return false;
+                }
+                tempCards[newCardIndex].balance -= newPrice;
+            } else {
+                tempCards[newCardIndex].balance += newPrice;
             }
-
-            return {
-                transactions: state.transactions.map((t) => (t.id === updatedTransaction.id ? updatedTransaction : t)),
-                cards: updatedCards,
-            };
+        } else {
+            return false;
+        }
+        
+        set({
+            transactions: transactions.map(t => t.id === updatedTransaction.id ? updatedTransaction : t),
+            cards: tempCards
         });
-    },
+        return true;
+    }
 }));

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, Landmark, ChevronDown, UserRound, LayoutGrid, Banknote, WalletCards, ReceiptText, ShoppingBag } from "lucide-react";
+import { useAppStore } from "@/store/appStore";
 
 export default function EditTransactionModal({ onClose, onUpdateTransaction, transactionToEdit }) {
     const formatDateForInput = (dateStr) => {
@@ -19,6 +20,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
     const [category, setCategory] = useState("");
     const [fund, setFund] = useState("");
     const [errors, setErrors] = useState({});
+    const { updateTransaction, cards } = useAppStore();
 
     useEffect(() => {
         if (transactionToEdit) {
@@ -51,18 +53,25 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
 
         const updatedTransactionData = {
             ...transactionToEdit,
-            id: transactionToEdit.id,
-            activity: activity,
+            activity,
             id_transaction: orderId,
             date: new Date(date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
-            price: price,
-            type: type,
-            category: category,
-            fund: fund,
+            price,
+            type,
+            category,
+            fund,
         };
 
-        onUpdateTransaction(updatedTransactionData);
-        onClose();
+        const success = updateTransaction(updatedTransactionData);
+
+        if (success) {
+            onClose();
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                price: "Insufficient balance for this update.",
+            }));
+        }
     };
 
     return (
@@ -179,9 +188,11 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                                     <option value="" disabled>
                                         Choose Fund
                                     </option>
-                                    <option value="BRI">BRI</option>
-                                    <option value="BTN">BTN</option>
-                                    <option value="Jago">Jago</option>
+                                    {cards.map((card) => (
+                                        <option key={card.id} value={card.bank}>
+                                            {card.bank}
+                                        </option>
+                                    ))}
                                 </select>
                                 <ChevronDown size={20} className="absolute right-4 top-10 text-gray-400 pointer-events-none" />
                                 {errors.fund && <p className="text-red-500 text-xs mt-1">{errors.fund}</p>}

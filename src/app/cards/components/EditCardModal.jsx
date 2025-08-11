@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, Landmark, CreditCard, Wallet, UserRound, Calendar, Lock } from "lucide-react";
-import { useCardStore } from "@/store/archive/cardStore";
+import { useAppStore } from "@/store/appStore";
 
 export default function EditCardModal({ onClose, cardToEdit }) {
     const [bankName, setBankName] = useState("");
@@ -13,7 +13,7 @@ export default function EditCardModal({ onClose, cardToEdit }) {
     const [cvv, setCvv] = useState("");
     const [errors, setErrors] = useState({});
 
-    const updateCard = useCardStore((state) => state.updateCard);
+    const updateCard = useAppStore((state) => state.updateCard);
 
     useEffect(() => {
         if (cardToEdit) {

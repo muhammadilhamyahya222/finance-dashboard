@@ -19,8 +19,7 @@ export default function DashboardPage() {
         }).format(amount);
     };
 
-    const cards = useAppStore((state) => state.cards);
-    const transactions = useAppStore((state) => state.transactions);
+    const { cards, transactions } = useAppStore();
 
     const totalBalance = cards.reduce((sum, card) => sum + card.balance, 0);
     const totalIncome = transactions.filter((t) => t.type === "Income").reduce((sum, t) => sum + parseFloat(t.price), 0);
