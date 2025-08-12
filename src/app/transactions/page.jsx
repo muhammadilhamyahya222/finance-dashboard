@@ -8,9 +8,7 @@ export default function TransactionsPage() {
 
             <div className="mt-4">
                 <div className="bg-white p-5 rounded-3xl">
-                    
                     <TransactionsTable />
-                
                 </div>
             </div>
         </div>

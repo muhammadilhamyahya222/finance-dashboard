@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGrid, Settings, LogOut, Palette, CreditCard, ArrowRightLeft } from "lucide-react";
+import { LayoutGrid, Settings, LogOut, Palette, CreditCard, ArrowRightLeft, Tags } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -45,7 +45,7 @@ const Sidebar = () => {
                 <nav className="flex flex-col space-y-1">
                     <NavItem icon={<LayoutGrid size={20} />} label="Dashboard" href="/" active={pathname === "/"} />
                     <NavItem icon={<ArrowRightLeft size={20} />} label="Transaction" href="/transactions" active={pathname.startsWith("/transactions")} />
-                    <NavItem icon={<CreditCard size={20} />} label="Cards" href="/cards" active={pathname.startsWith("/cards")} />
+                    <NavItem icon={<CreditCard size={20} />} label="Card" href="/cards" active={pathname.startsWith("/cards")} />
                 </nav>
             </div>
 
@@ -53,7 +53,7 @@ const Sidebar = () => {
             <div className="flex-grow">
                 <p className="text-sm text-gray-400 font-normal mb-4 pl-4">General</p>
                 <nav className="flex flex-col space-y-1">
-                    <NavItem icon={<Settings size={20} />} label="Settings" href="#" />
+                    <NavItem icon={<Settings size={20} />} label="Setting" href="#" />
                     <NavItem icon={<Palette size={20} />} label="Theme" href="#">
                         <ThemeToggle />
                     </NavItem>

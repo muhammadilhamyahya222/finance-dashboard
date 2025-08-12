@@ -1,19 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, } from "react";
 import { Search, ChevronDown, Filter, Wallet, MoreHorizontal, SquareIcon, PlusCircle } from "lucide-react";
 import AddTransactionModal from "./components/AddTransactionModal";
 import EditTransactionModal from "./components/EditTransactionModal";
-import { useTransactionStore } from "@/store/archive/transactionStore";
 import { useAppStore } from "@/store/appStore";
 
 const formatCurrency = (amount) => {
+    // Pastikan input adalah angka sebelum memformat
+    const number = typeof amount === 'string' ? parseFloat(amount) : amount;
+    if (isNaN(number)) return "Rp 0";
+
     return new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-    }).format(amount);
+    }).format(number);
 };
 
 const TypePill = ({ type }) => {
@@ -27,12 +30,22 @@ const TypePill = ({ type }) => {
 
 export const TransactionsTable = () => {
     const { transactions, deleteTransaction } = useAppStore();
+    
+    // State untuk modal
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
+    
+    // State untuk filter dan pencarian
     const [searchQuery, setSearchQuery] = useState("");
-    const [openActionMenuId, setOpenActionMenuId] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [selectedType, setSelectedType] = useState("All");
 
+    // State untuk visibilitas dropdown
+    const [openActionMenuId, setOpenActionMenuId] = useState(null);
+    const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
+
+    // Handler untuk modal
     const openAddModal = () => setIsAddModalOpen(true);
     const closeAddModal = () => setIsAddModalOpen(false);
 
@@ -54,9 +67,21 @@ export const TransactionsTable = () => {
         }
     };
 
-    const filteredTransaction = transactions.filter(
-        (transaction) => transaction.activity.toLowerCase().includes(searchQuery.toLowerCase()) || transaction.date.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Mengambil daftar kategori unik dari transaksi
+    const uniqueCategories = useMemo(() => {
+        const categories = new Set(transactions.map(tx => tx.category));
+        return ["All", ...categories];
+    }, [transactions]);
+
+    // Logika filter gabungan
+    const filteredTransaction = transactions.filter(transaction => {
+        const matchesSearch = transaction.activity.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              transaction.date.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = selectedCategory === "All" || transaction.category === selectedCategory;
+        const matchesType = selectedType === "All" || transaction.type === selectedType;
+
+        return matchesSearch && matchesCategory && matchesType;
+    });
 
     return (
         <div>
@@ -86,15 +111,44 @@ export const TransactionsTable = () => {
                             className="py-2 pl-11 w-60 bg-white border border-gray-200 text-gray-800 rounded-xl text-sm font-semibold placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
                         />
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <button className="flex items-center space-x-2 border border-gray-200 bg-white rounded-xl px-2 py-2 text-sm font-bold text-gray-800 hover:bg-gray-50">
-                            <span>All Category</span>
-                            <ChevronDown size={16} />
-                        </button>
-                        <button className="flex items-center space-x-2 border border-gray-200 bg-white rounded-xl px-2 py-2 text-sm font-bold text-gray-800 hover:bg-gray-50">
+                    {/* FILTER DROPDOWN GABUNGAN */}
+                    <div className="relative">
+                        <button onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)} className="flex items-center space-x-2 border border-gray-200 bg-white rounded-xl px-3 py-2 text-sm font-bold text-gray-800 hover:bg-gray-50">
                             <span>Filter</span>
                             <Filter size={16} />
                         </button>
+                        {isFilterDropdownOpen && (
+                            <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow-xl z-20 p-4">
+                                <h4 className="font-bold text-gray-800 mb-2">Filter by Type</h4>
+                                <div className="flex space-x-2 mb-4">
+                                    {["All", "Income", "Expense"].map(type => (
+                                        <button
+                                            key={type}
+                                            onClick={() => setSelectedType(type)}
+                                            className={`px-3 py-1 text-sm rounded-full ${selectedType === type ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-700'}`}
+                                        >
+                                            {type}
+                                        </button>
+                                    ))}
+                                </div>
+                                <h4 className="font-bold text-gray-800 mb-2">Filter by Category</h4>
+                                <div className="relative">
+                                    <select 
+                                        value={selectedCategory} 
+                                        onChange={(e) => setSelectedCategory(e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500 text-gray-700"
+                                    >
+                                        {uniqueCategories.map(category => (
+                                            <option key={category} value={category}>{category}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                                </div>
+                                <button onClick={() => setIsFilterDropdownOpen(false)} className="mt-4 w-full bg-brand-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-brand-700">
+                                    Close
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -103,9 +157,7 @@ export const TransactionsTable = () => {
                 <table className="min-w-full text-sm text-left table-fixed">
                     <thead className="text-gray-500 bg-gray-50">
                         <tr className="border-b border-gray-200">
-                            <th className="p-3 text-gray-300">
-                                <SquareIcon size={20} />
-                            </th>
+                            <th className="p-3 text-gray-300"><SquareIcon size={20} /></th>
                             <th className="p-3 font-semibold">Activity</th>
                             <th className="p-3 font-semibold">Order ID</th>
                             <th className="p-3 font-semibold">Date</th>
@@ -119,16 +171,12 @@ export const TransactionsTable = () => {
                     <tbody>
                         {filteredTransaction.map((transaction) => (
                             <tr key={transaction.id} className="border-b last:border-0 hover:bg-gray-50">
-                                <td className="p-3 text-gray-300">
-                                    <SquareIcon size={20} />
-                                </td>
+                                <td className="p-3 text-gray-300"><SquareIcon size={20} /></td>
                                 <td className="p-3 w-1/5 font-semibold text-gray-800">{transaction.activity}</td>
                                 <td className="p-3 font-semibold text-gray-800">{transaction.id_transaction}</td>
                                 <td className="p-3 font-semibold text-gray-800">{transaction.date}</td>
                                 <td className="p-3 font-semibold text-gray-800">{formatCurrency(transaction.price)}</td>
-                                <td className="p-3">
-                                    <TypePill type={transaction.type} />
-                                </td>
+                                <td className="p-3"><TypePill type={transaction.type} /></td>
                                 <td className="p-3 font-semibold text-gray-800">{transaction.category}</td>
                                 <td className="p-3 font-semibold text-gray-800">{transaction.fund}</td>
                                 <td className="p-3 relative">
