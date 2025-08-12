@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ChevronDown, Wifi } from "lucide-react";
-import { useCardStore } from "@/store/archive/cardStore";
+import { useAppStore } from "@/store/appStore";
 
 const MastercardLogo = () => (
     <div className="flex">
@@ -21,7 +21,7 @@ const formatCurrency = (amount) => {
 };
 
 export const MyCards = () => {
-    const cards = useCardStore((state) => state.cards);
+    const cards = useAppStore((state) => state.cards);
 
     const [selectedCard, setSelectedCard] = useState(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);

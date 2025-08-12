@@ -1,10 +1,16 @@
-const transactions = [
-    { id: "1", activity: "KAI Sby-Jbr", price: "88000", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "2", activity: "Hotel Booking", price: "150000", type: "Expense", category: "Ticket", fund: "BRI" },
-    { id: "3", activity: "Geprek Basmalah", price: "13000", type: "Income", category: "Food", fund: "BTN" },
-];
+"use client";
 
 import { Search, ChevronDown, Filter, Wallet, SquareIcon } from "lucide-react";
+import { useAppStore } from "@/store/appStore";
+
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(amount);
+};
 
 const TypePill = ({ type }) => {
     const baseClasses = "px-3 py-1 rounded-full text-xs font-semibold";
@@ -16,6 +22,9 @@ const TypePill = ({ type }) => {
 };
 
 export const RecentTransactions = () => {
+    const transactions = useAppStore((state) => state.transactions);
+    const recentTxs = transactions.slice(0, 3);
+
     return (
         <div>
             <div className="flex items-center justify-between border p-2 bg-gray-50 border-gray-200 rounded-2xl">
@@ -62,20 +71,28 @@ export const RecentTransactions = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {transactions.map((tx) => (
-                            <tr key={tx.id} className="border-b last:border-0 hover:bg-gray-50">
-                                <td className="p-3 text-gray-300">
-                                    <SquareIcon size={20} />
+                        {recentTxs.length > 0 ? (
+                            recentTxs.map((tx) => (
+                                <tr key={tx.id} className="border-b last:border-0 hover:bg-gray-50">
+                                    <td className="p-3 text-gray-300">
+                                        <SquareIcon size={20} />
+                                    </td>
+                                    <td className="p-3 font-semibold text-gray-800">{tx.activity}</td>
+                                    <td className="p-3 font-semibold text-gray-800">{formatCurrency(tx.price)}</td>
+                                    <td className="p-3">
+                                        <TypePill type={tx.type} />
+                                    </td>
+                                    <td className="p-3 font-semibold text-gray-800">{tx.category}</td>
+                                    <td className="p-3 font-semibold text-gray-800">{tx.fund}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="text-center p-6 text-gray-500">
+                                    No recent transactions found.
                                 </td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.activity}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.price}</td>
-                                <td className="p-3">
-                                    <TypePill type={tx.type} />
-                                </td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.category}</td>
-                                <td className="p-3 font-semibold text-gray-800">{tx.fund}</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>
