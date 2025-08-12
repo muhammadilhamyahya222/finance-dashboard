@@ -14,7 +14,6 @@ export default function DashboardPage() {
 
             <div className="mt-4">
                 <div className="bg-white p-5 rounded-3xl">
-                    {/* Komponen Greeting sekarang sudah berisi StatsCard */}
                     <Greeting />
                 </div>
             </div>

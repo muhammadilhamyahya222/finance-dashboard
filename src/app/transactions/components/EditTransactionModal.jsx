@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Landmark, ChevronDown, UserRound, LayoutGrid, Banknote, WalletCards, ReceiptText, ShoppingBag } from "lucide-react";
+import { X, Landmark, ChevronDown, UserRound, LayoutGrid, Banknote, WalletCards, ReceiptText, ShoppingBag, Calendar } from "lucide-react";
 import { useAppStore } from "@/store/appStore";
 
-export default function EditTransactionModal({ onClose, onUpdateTransaction, transactionToEdit }) {
+export default function EditTransactionModal({ onClose, transactionToEdit }) {
     const formatDateForInput = (dateStr) => {
         if (!dateStr) return "";
-        const dateObj = new Date(dateStr);
+        const cleanDateStr = dateStr.replace(/(\d+)(st|nd|rd|th)/, "$1");
+        const dateObj = new Date(cleanDateStr);
         if (isNaN(dateObj)) return "";
         return dateObj.toISOString().split("T")[0];
     };
@@ -20,7 +21,11 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
     const [category, setCategory] = useState("");
     const [fund, setFund] = useState("");
     const [errors, setErrors] = useState({});
-    const { updateTransaction, cards } = useAppStore();
+
+    const [isCustomCategory, setIsCustomCategory] = useState(false);
+    const [customCategory, setCustomCategory] = useState("");
+
+    const { updateTransaction, cards, incomeCategories, expenseCategories } = useAppStore();
 
     useEffect(() => {
         if (transactionToEdit) {
@@ -29,21 +34,50 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
             setDate(formatDateForInput(transactionToEdit.date));
             setPrice(transactionToEdit.price || "");
             setType(transactionToEdit.type || "");
-            setCategory(transactionToEdit.category || "");
             setFund(transactionToEdit.fund || "");
+
+            const currentCategories = transactionToEdit.type === "Income" ? incomeCategories : expenseCategories;
+            if (currentCategories.includes(transactionToEdit.category)) {
+                setIsCustomCategory(false);
+                setCategory(transactionToEdit.category);
+            } else {
+                setIsCustomCategory(true);
+                setCustomCategory(transactionToEdit.category || "");
+                setCategory("");
+            }
         }
-    }, [transactionToEdit]);
+    }, [transactionToEdit, incomeCategories, expenseCategories]);
+
+    const handleTypeChange = (e) => {
+        setType(e.target.value);
+        setCategory("");
+        setIsCustomCategory(false);
+        setCustomCategory("");
+    };
+
+    const handleCategoryChange = (e) => {
+        const value = e.target.value;
+        if (value === "add_new") {
+            setIsCustomCategory(true);
+            setCategory("");
+        } else {
+            setIsCustomCategory(false);
+            setCategory(value);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const finalCategory = isCustomCategory ? customCategory : category;
+
         const newErrors = {};
         if (!activity) newErrors.activity = "Activity name is required.";
-        if (!orderId) newErrors.orderId = "Order Id number is required.";
+        if (!orderId) newErrors.orderId = "Order Id is required.";
         if (!date) newErrors.date = "Date is required.";
-        if (!price) newErrors.price = "Price balance is required.";
+        if (!price) newErrors.price = "Price is required.";
         if (!type) newErrors.type = "Type is required.";
-        if (!category) newErrors.category = "Category is required.";
+        if (!finalCategory) newErrors.category = "Category is required.";
         if (!fund) newErrors.fund = "Fund Source is required.";
 
         if (Object.keys(newErrors).length > 0) {
@@ -58,7 +92,7 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
             date: new Date(date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
             price,
             type,
-            category,
+            category: finalCategory,
             fund,
         };
 
@@ -81,7 +115,6 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                     <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
                         <X size={24} />
                     </button>
-                    {/* 5. Ubah Judul Modal */}
                     <h2 className="text-2xl font-bold text-gray-800">Edit Transaction</h2>
                 </div>
 
@@ -146,11 +179,11 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                             {/* Input Type */}
                             <div className="relative">
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Type</label>
-                                <WalletCards size={20} className="absolute left-3 top-9.5 text-gray-400" />
+                                <WalletCards size={20} className="absolute left-3 top-9 text-gray-400" />
                                 <select
                                     value={type}
-                                    onChange={(e) => setType(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600 appearance-none"
+                                    onChange={handleTypeChange}
+                                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600 appearance-none"
                                 >
                                     <option value="" disabled>
                                         Choose Type
@@ -163,18 +196,44 @@ export default function EditTransactionModal({ onClose, onUpdateTransaction, tra
                             </div>
 
                             {/* Input Category */}
-                            <div className="relative">
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Category</label>
-                                <LayoutGrid size={20} className="absolute left-3 top-9.5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="e.g., Food"
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600"
-                                />
-                                {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
-                            </div>
+                            {type && (
+                                <>
+                                    <div className="relative">
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Category</label>
+                                        <LayoutGrid size={20} className="absolute left-3 top-9 text-gray-400" />
+                                        <select
+                                            value={isCustomCategory ? "add_new" : category}
+                                            onChange={handleCategoryChange}
+                                            className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600 appearance-none"
+                                        >
+                                            <option value="" disabled>
+                                                Choose Category
+                                            </option>
+                                            {(type === "Income" ? incomeCategories : expenseCategories).map((cat) => (
+                                                <option key={cat} value={cat}>
+                                                    {cat}
+                                                </option>
+                                            ))}
+                                            <option value="add_new">Add New Category...</option>
+                                        </select>
+                                        <ChevronDown size={20} className="absolute right-4 top-10 text-gray-400 pointer-events-none" />
+                                    </div>
+
+                                    {isCustomCategory && (
+                                        <div className="relative">
+                                            <label className="block text-sm font-semibold text-gray-600 mb-1">New Category Name</label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g., Personal Project"
+                                                value={customCategory}
+                                                onChange={(e) => setCustomCategory(e.target.value)}
+                                                className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600"
+                                            />
+                                        </div>
+                                    )}
+                                    {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
+                                </>
+                            )}
 
                             {/* Input Fund */}
                             <div className="relative">

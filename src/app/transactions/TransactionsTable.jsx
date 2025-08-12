@@ -7,7 +7,6 @@ import EditTransactionModal from "./components/EditTransactionModal";
 import { useAppStore } from "@/store/appStore";
 
 const formatCurrency = (amount) => {
-    // Pastikan input adalah angka sebelum memformat
     const number = typeof amount === 'string' ? parseFloat(amount) : amount;
     if (isNaN(number)) return "Rp 0";
 
@@ -31,21 +30,19 @@ const TypePill = ({ type }) => {
 export const TransactionsTable = () => {
     const { transactions, deleteTransaction } = useAppStore();
     
-    // State untuk modal
+    // Modal State
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     
-    // State untuk filter dan pencarian
+    // Filter & Search State
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [selectedType, setSelectedType] = useState("All");
-
-    // State untuk visibilitas dropdown
     const [openActionMenuId, setOpenActionMenuId] = useState(null);
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
-    // Handler untuk modal
+    // Modal Handler
     const openAddModal = () => setIsAddModalOpen(true);
     const closeAddModal = () => setIsAddModalOpen(false);
 
@@ -67,13 +64,11 @@ export const TransactionsTable = () => {
         }
     };
 
-    // Mengambil daftar kategori unik dari transaksi
     const uniqueCategories = useMemo(() => {
         const categories = new Set(transactions.map(tx => tx.category));
         return ["All", ...categories];
     }, [transactions]);
 
-    // Logika filter gabungan
     const filteredTransaction = transactions.filter(transaction => {
         const matchesSearch = transaction.activity.toLowerCase().includes(searchQuery.toLowerCase()) || 
                               transaction.date.toLowerCase().includes(searchQuery.toLowerCase());
@@ -111,7 +106,6 @@ export const TransactionsTable = () => {
                             className="py-2 pl-11 w-60 bg-white border border-gray-200 text-gray-800 rounded-xl text-sm font-semibold placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
                         />
                     </div>
-                    {/* FILTER DROPDOWN GABUNGAN */}
                     <div className="relative">
                         <button onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)} className="flex items-center space-x-2 border border-gray-200 bg-white rounded-xl px-3 py-2 text-sm font-bold text-gray-800 hover:bg-gray-50">
                             <span>Filter</span>

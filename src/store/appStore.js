@@ -12,9 +12,14 @@ const initialTransactions = [
     { id: "3", id_transaction: "INV_000074", activity: "Geprek Basmalah", date: "15 Apr, 2028", time: "09:00 AM", price: "13000", type: "Income", category: "Food", fund: "BTN" },
 ];
 
+const defaultIncomeCategories = ["Salary", "Bonus", "Investment", "Gifts"];
+const defaultExpenseCategories = ["Food", "Transportation", "Utilities", "Shopping", "Health", "Entertainment", "Education"];
+
 export const useAppStore = create((set, get) => ({
     cards: initialCards,
     transactions: initialTransactions,
+    incomeCategories: defaultIncomeCategories,
+    expenseCategories: defaultExpenseCategories,
 
     // === ACTIONS ===
 
@@ -98,25 +103,25 @@ export const useAppStore = create((set, get) => ({
 
     updateTransaction: (updatedTransaction) => {
         const { transactions, cards } = get();
-        const originalTransaction = transactions.find(t => t.id === updatedTransaction.id);
+        const originalTransaction = transactions.find((t) => t.id === updatedTransaction.id);
         if (!originalTransaction) return false;
 
         let tempCards = JSON.parse(JSON.stringify(cards));
-        
+
         const originalPrice = parseFloat(originalTransaction.price);
-        const originalCardIndex = tempCards.findIndex(c => c.bank === originalTransaction.fund);
+        const originalCardIndex = tempCards.findIndex((c) => c.bank === originalTransaction.fund);
         if (originalCardIndex !== -1) {
-            if (originalTransaction.type === 'Expense') {
+            if (originalTransaction.type === "Expense") {
                 tempCards[originalCardIndex].balance += originalPrice;
-            } else { 
+            } else {
                 tempCards[originalCardIndex].balance -= originalPrice;
             }
         }
 
         const newPrice = parseFloat(updatedTransaction.price);
-        const newCardIndex = tempCards.findIndex(c => c.bank === updatedTransaction.fund);
+        const newCardIndex = tempCards.findIndex((c) => c.bank === updatedTransaction.fund);
         if (newCardIndex !== -1) {
-            if (updatedTransaction.type === 'Expense') {
+            if (updatedTransaction.type === "Expense") {
                 if (tempCards[newCardIndex].balance < newPrice) {
                     return false;
                 }
@@ -127,11 +132,11 @@ export const useAppStore = create((set, get) => ({
         } else {
             return false;
         }
-        
+
         set({
-            transactions: transactions.map(t => t.id === updatedTransaction.id ? updatedTransaction : t),
-            cards: tempCards
+            transactions: transactions.map((t) => (t.id === updatedTransaction.id ? updatedTransaction : t)),
+            cards: tempCards,
         });
         return true;
-    }
+    },
 }));

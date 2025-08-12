@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Upload, Wallet, TrendingUp, TrendingDown, PiggyBank, MoreHorizontal } from "lucide-react";
+import { ChevronDown, Upload, Wallet, TrendingUp, TrendingDown, PiggyBank } from "lucide-react";
 import { useAppStore } from "@/store/appStore";
 
-// Pindahkan 'cardStyles' dan komponen 'StatsCard' ke sini
 const cardStyles = {
     balance: {
         Icon: Wallet,
@@ -15,19 +14,19 @@ const cardStyles = {
     income: {
         Icon: TrendingUp,
         gradient: "from-orange-500 to-red-500",
-        title: "Income", // Judul disederhanakan
+        title: "Income",
         subtitle: "Total income for period",
     },
     expenses: {
         Icon: TrendingDown,
         gradient: "from-pink-500 to-rose-500",
-        title: "Expenses", // Judul disederhanakan
+        title: "Expenses",
         subtitle: "Total expenses for period",
     },
     savings: {
         Icon: PiggyBank,
         gradient: "from-blue-400 to-sky-500",
-        title: "Savings", // Judul disederhanakan
+        title: "Savings",
         subtitle: "Total savings for period",
     },
 };
@@ -50,23 +49,21 @@ const StatsCard = ({ type, amount }) => {
             </div>
             <div className="flex items-center justify-between mt-2 ml-1 mr-1">
                 <p className="text-md font-semibold text-gray-800">{title}</p>
-                {/* Tombol MoreHorizontal dihapus dari sini */}
             </div>
         </div>
     );
 };
 
-// Fungsi format mata uang sekarang menyingkat Triliun (T), Miliar (M), dan Juta (jt)
 const formatCurrency = (amount) => {
-    const number = typeof amount === 'string' ? parseFloat(amount) : amount;
+    const number = typeof amount === "string" ? parseFloat(amount) : amount;
     if (isNaN(number)) return "Rp 0";
 
     const absNumber = Math.abs(number);
     const sign = number < 0 ? "-" : "";
 
-    if (absNumber >= 1e12) return `${sign}Rp ${new Intl.NumberFormat('id-ID', { maximumFractionDigits: 1 }).format(absNumber / 1e12)}T`;
-    if (absNumber >= 1e9) return `${sign}Rp ${new Intl.NumberFormat('id-ID', { maximumFractionDigits: 1 }).format(absNumber / 1e9)}M`;
-    if (absNumber >= 1e6) return `${sign}Rp ${new Intl.NumberFormat('id-ID', { maximumFractionDigits: 1 }).format(absNumber / 1e6)}jt`;
+    if (absNumber >= 1e12) return `${sign}Rp ${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(absNumber / 1e12)}T`;
+    if (absNumber >= 1e9) return `${sign}Rp ${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(absNumber / 1e9)}M`;
+    if (absNumber >= 1e6) return `${sign}Rp ${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(absNumber / 1e6)}jt`;
 
     return new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -78,18 +75,17 @@ const formatCurrency = (amount) => {
 
 export const Greeting = () => {
     const { cards, transactions } = useAppStore();
-    
-    // State untuk mengelola rentang waktu yang dipilih
+
+    // Selected Time Range State
     const [selectedRange, setSelectedRange] = useState("This Month");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const rangeOptions = ["This Month", "Last Month", "This Year", "All Time"];
 
-    // Filter transaksi berdasarkan rentang waktu yang dipilih
-    const filteredTransactions = transactions.filter(tx => {
+    const filteredTransactions = transactions.filter((tx) => {
         const now = new Date();
         const txDate = new Date(tx.date.replace(/(\d+)(st|nd|rd|th)/, "$1"));
-        
+
         switch (selectedRange) {
             case "This Month":
                 return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
@@ -106,7 +102,6 @@ export const Greeting = () => {
         }
     });
 
-    // Kalkulasi tetap sama, tapi menggunakan 'filteredTransactions'
     const totalBalance = cards.reduce((sum, card) => sum + card.balance, 0);
     const totalIncome = filteredTransactions.filter((t) => t.type === "Income").reduce((sum, t) => sum + parseFloat(t.price), 0);
     const totalExpenses = filteredTransactions.filter((t) => t.type === "Expense").reduce((sum, t) => sum + parseFloat(t.price), 0);
@@ -125,23 +120,18 @@ export const Greeting = () => {
                     <p className="text-gray-500 mt-1">Here's an overview of your financial health and recent activity.</p>
                 </div>
                 <div className="flex items-center space-x-3 mt-4 md:mt-0">
-                    {/* Tombol dropdown rentang waktu */}
                     <div className="relative">
-                        <button 
+                        <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="flex items-center space-x-2 border border-gray-200 bg-white rounded-lg px-3 py-2 text-md font-semibold text-gray-800 hover:bg-gray-50"
                         >
                             <span>{selectedRange}</span>
-                            <ChevronDown size={16} className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown size={16} className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`} />
                         </button>
                         {isDropdownOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-xl z-20">
                                 {rangeOptions.map((range, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => handleRangeSelect(range)}
-                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >
+                                    <button key={index} onClick={() => handleRangeSelect(range)} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         {range}
                                     </button>
                                 ))}

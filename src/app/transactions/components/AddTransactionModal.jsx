@@ -14,10 +14,33 @@ export default function AddTransactionModal({ onClose }) {
     const [fund, setFund] = useState("");
     const [errors, setErrors] = useState({});
 
-    const { addTransactionAndUpdateBalance, cards } = useAppStore();
+    const [isCustomCategory, setIsCustomCategory] = useState(false);
+    const [customCategory, setCustomCategory] = useState("");
+
+    const { addTransactionAndUpdateBalance, cards, incomeCategories, expenseCategories } = useAppStore();
+
+    const handleTypeChange = (e) => {
+        setType(e.target.value);
+        setCategory("");
+        setIsCustomCategory(false);
+        setCustomCategory("");
+    };
+
+    const handleCategoryChange = (e) => {
+        const value = e.target.value;
+        if (value === "add_new") {
+            setIsCustomCategory(true);
+            setCategory("");
+        } else {
+            setIsCustomCategory(false);
+            setCategory(value);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const finalCategory = isCustomCategory ? customCategory : category;
 
         const newErrors = {};
         if (!activity) newErrors.activity = "Activity name is required.";
@@ -25,7 +48,7 @@ export default function AddTransactionModal({ onClose }) {
         if (!date) newErrors.date = "Date is required.";
         if (!price) newErrors.price = "Price is required.";
         if (!type) newErrors.type = "Type is required.";
-        if (!category) newErrors.category = "Category is required.";
+        if (!finalCategory) newErrors.category = "Category is required.";
         if (!fund) newErrors.fund = "Fund Source is required.";
 
         if (Object.keys(newErrors).length > 0) {
@@ -41,7 +64,7 @@ export default function AddTransactionModal({ onClose }) {
             date: new Date(date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }),
             price,
             type,
-            category,
+            category: finalCategory,
             fund,
         };
 
@@ -50,9 +73,9 @@ export default function AddTransactionModal({ onClose }) {
         if (success) {
             onClose();
         } else {
-            setErrors(prevErrors => ({
+            setErrors((prevErrors) => ({
                 ...prevErrors,
-                price: "Insufficient balance for this expense."
+                price: "Insufficient balance for this expense.",
             }));
         }
     };
@@ -131,8 +154,8 @@ export default function AddTransactionModal({ onClose }) {
                                 <WalletCards size={20} className="absolute left-3 top-9.5 text-gray-400" />
                                 <select
                                     value={type}
-                                    onChange={(e) => setType(e.target.value)}
-                                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 font-semibold text-gray-600 appearance-none"
+                                    onChange={handleTypeChange}
+                                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600 appearance-none"
                                 >
                                     <option value="" disabled>
                                         Choose Type
@@ -145,18 +168,44 @@ export default function AddTransactionModal({ onClose }) {
                             </div>
 
                             {/* Input Category */}
-                            <div className="relative">
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Category</label>
-                                <LayoutGrid size={20} className="absolute left-3 top-9.5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="e.g., Food"
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 placeholder:text-gray-300 font-semibold text-gray-600"
-                                />
-                                {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
-                            </div>
+                            {type && (
+                                <>
+                                    <div className="relative">
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Category</label>
+                                        <LayoutGrid size={20} className="absolute left-3 top-9.5 text-gray-400" />
+                                        <select
+                                            value={isCustomCategory ? "add_new" : category}
+                                            onChange={handleCategoryChange}
+                                            className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600 appearance-none"
+                                        >
+                                            <option value="" disabled>
+                                                Choose Category
+                                            </option>
+                                            {(type === "Income" ? incomeCategories : expenseCategories).map((cat) => (
+                                                <option key={cat} value={cat}>
+                                                    {cat}
+                                                </option>
+                                            ))}
+                                            <option value="add_new">Add New Category...</option>
+                                        </select>
+                                        <ChevronDown size={20} className="absolute right-4 top-10 text-gray-400 pointer-events-none" />
+                                    </div>
+
+                                    {isCustomCategory && (
+                                        <div className="relative">
+                                            <label className="block text-sm font-semibold text-gray-600 mb-1">New Category Name</label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g., Personal Project"
+                                                value={customCategory}
+                                                onChange={(e) => setCustomCategory(e.target.value)}
+                                                className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-gray-600"
+                                            />
+                                        </div>
+                                    )}
+                                    {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
+                                </>
+                            )}
 
                             {/* Input Fund */}
                             <div className="relative">
